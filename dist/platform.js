@@ -1,6 +1,6 @@
-import {config} from './config.js';
-import {setCurriculum} from './courses.js';
-import {mergeState} from './state-merge.js';
+import {config} from './config.js?v=20261124-wuxu1';
+import {setCurriculum} from './courses.js?v=20261124-wuxu1';
+import {mergeState} from './state-merge.js?v=20261124-wuxu1';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sessionKey='zhiben-auth-v1',deviceStorageKey='zhiben-browser-v1';
 let current=null,refreshing,revision=0,baseState={},pendingState,queue=Promise.resolve(),timer,heartbeat;
@@ -52,7 +52,7 @@ export const platform={
 };
 window.platform=platform;
 const browserLabel=()=>{const ua=navigator.userAgent;let browser=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Firefox\//.test(ua)?'Firefox':/Safari\//.test(ua)?'Safari':'浏览器';return browser+' · '+(/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':/Windows/.test(ua)?'Windows':/Macintosh/.test(ua)?'macOS':'设备');};
-function gateShell(content){$('#app').innerHTML=`<main class="auth-page"><section class="auth-story"><a class="auth-brand" href="./"><span>知本.</span><small>金融知识体系</small></a><div><span class="auth-eyebrow">UNDERSTAND, THEN DECIDE.</span><h1>把金融知识，<br>变成自己的判断。</h1><p>从货币、信用到股票与债券，<br>循序渐进理解钱的逻辑。</p><div class="auth-features"><span>系统课程</span><span>互动实验</span><span>复习与练习</span></div></div><small>让理解，成为你的底气。</small></section><section class="auth-panel">${content}</section></main>`;}
+function gateShell(content){$('#app').innerHTML=`<main class="auth-page"><section class="auth-story"><a class="auth-brand" href="./"><span>戊戌.</span><small>金融知识体系</small></a><div><span class="auth-eyebrow">UNDERSTAND, THEN DECIDE.</span><h1>把金融知识，<br>变成自己的判断。</h1><p>从货币、信用到资本与并购，<br>循序渐进理解钱的逻辑。</p><div class="auth-features"><span>系统课程</span><span>互动实验</span><span>复习与练习</span></div></div><small>让理解，成为你的底气。</small></section><section class="auth-panel">${content}</section></main>`;}
 export async function showGate(admin=false){
   const setup=new URLSearchParams(location.hash.slice(1)).get('setup');
   if(setup){
@@ -65,7 +65,7 @@ export async function showGate(admin=false){
     }catch(e){$('#setup-content').innerHTML=`<p class="auth-error">${esc(e.message)}</p><a class="button secondary" href="./">返回登录</a>`;}return;
   }
   if(!current?.access_token){
-    gateShell(`<div class="auth-box"><span class="eyebrow">欢迎回到知本</span><h2>登录你的学习空间</h2><p class="muted">继续课程，保存每一次理解。</p><form id="login-form" class="auth-form"><label>登录邮箱<input type="email" name="email" required autocomplete="username" placeholder="你的账号邮箱"></label><label>密码<input name="password" type="password" required autocomplete="current-password" placeholder="输入登录密码"></label><p class="auth-error" role="alert"></p><button class="button primary" type="submit">登录学习</button></form><div class="auth-notice"><b>账号由管理员开通</b><p>首次在新浏览器登录后，需要管理员批准此浏览器。</p></div><p class="auth-privacy">本站记录登录时间、浏览器信息、课程进度与练习成绩，供管理员管理账号和检查学习情况。</p></div>`);
+    gateShell(`<div class="auth-box"><span class="eyebrow">欢迎回到戊戌</span><h2>登录你的学习空间</h2><p class="muted">继续课程，保存每一次理解。</p><form id="login-form" class="auth-form"><label>登录邮箱<input type="email" name="email" required autocomplete="username" placeholder="你的账号邮箱"></label><label>密码<input name="password" type="password" required autocomplete="current-password" placeholder="输入登录密码"></label><p class="auth-error" role="alert"></p><button class="button primary" type="submit">登录学习</button></form><div class="auth-notice"><b>账号由管理员开通</b><p>首次在新浏览器登录后，需要管理员批准此浏览器。</p></div><p class="auth-privacy">本站记录登录时间、浏览器信息、课程进度与练习成绩，供管理员管理账号和检查学习情况。</p></div>`);
     $('#login-form').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget,button=f.querySelector('button');button.disabled=true;button.textContent='正在登录…';try{await auth('token?grant_type=password',{email:f.email.value.trim(),password:f.password.value});location.reload();}catch(err){$('.auth-error').textContent=err.message;button.disabled=false;button.textContent='登录学习';}});return;
   }
   gateShell('<div class="auth-box"><span class="eyebrow">正在准备你的学习空间</span><h2>确认账号与浏览器授权</h2><p class="muted">马上就好。</p></div>');
@@ -81,7 +81,7 @@ export async function showGate(admin=false){
     const pending=localStorage.getItem(platform.storageKey+':pending');if(pending){try{const local=JSON.parse(pending),old=JSON.parse(localStorage.getItem(platform.storageKey+':base')||'{}');platform.state=mergeState(old,local,saved.state);platform.saveState(platform.state);}catch{}}localStorage.setItem(platform.storageKey,JSON.stringify(platform.state));
     $('#app').innerHTML='';
     heartbeat=setInterval(async()=>{try{const s=await api('status',{label:browserLabel()});if(s.profile.status!=='active'||s.device.status!=='active')location.reload();}catch(e){if(e.status===401||e.status===403)location.reload();}},45000);
-    if(admin)await import('./admin.js');else await import('./app.js');
+    if(admin)await import('./admin.js?v=20261124-wuxu1');else await import('./app.js?v=20261124-wuxu1');
   }catch(err){gateShell(`<div class="auth-box"><h2>暂时无法进入学习空间</h2><p class="auth-error">${esc(err.message)}</p><div class="button-row"><button class="button primary" id="retry-entry">重新检查</button><button class="button secondary" id="gate-logout">退出登录</button></div></div>`);$('#retry-entry').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();}
 }
 window.addEventListener('online',()=>{const stored=platform.profile&&localStorage.getItem(platform.storageKey+':pending');if(stored){try{platform.saveState(JSON.parse(stored));}catch{}}});

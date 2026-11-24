@@ -28,3 +28,19 @@ export function portfolioMetrics(w,rs,rb,vs,vb,rho) {
   return {expected:w*rs+(1-w)*rb,volatility:Math.sqrt(Math.max(0,w*w*vs*vs+(1-w)**2*vb*vb+2*w*(1-w)*rho*vs*vb))};
 }
 export function compound(principal,rate,years) { return principal*(1+rate)**years; }
+
+// Annual asset-management operating model; money inputs share the same unit.
+export function institutionMetrics(aum,fee,cost,loss,tax,capital) {
+  if (![aum,fee,cost,loss,tax,capital].every(Number.isFinite) || aum<0 || fee<0 || cost<0 || loss<0 || tax<0 || tax>1 || capital<=0) throw new Error('请检查规模、费用、税率与风险资本。');
+  const revenue=aum*fee, pretax=revenue-cost-loss;
+  const adjustedProfit=pretax-Math.max(0,pretax)*tax;
+  return {revenue,pretax,adjustedProfit,raroc:adjustedProfit/capital,costIncome:revenue>0?cost/revenue:null,breakEvenAum:fee>0?(cost+loss)/fee:null};
+}
+
+// Finite, year-end incremental after-tax free cash flows; no terminal value.
+export function acquisitionMetrics(standalone,offer,debt,cash,synergy,years,rate,realization,integration,fees) {
+  if (![standalone,offer,debt,cash,synergy,years,rate,realization,integration,fees].every(Number.isFinite) || standalone<0 || offer<0 || debt<0 || cash<0 || !Number.isInteger(years) || years<1 || years>50 || rate<=-1 || realization<0 || realization>1 || integration<0 || fees<0 || offer-debt+cash<0) throw new Error('请检查企业价值、年数、兑现比例和现金债务口径。');
+  const cashflows=Array.from({length:years},(_,i)=>({year:i+1,cash:synergy*realization,pv:synergy*realization/(1+rate)**(i+1)}));
+  const synergyPV=cashflows.reduce((s,c)=>s+c.pv,0), premium=offer-standalone;
+  return {synergyPV,premium,equityPrice:offer-debt+cash,maxOffer:standalone+synergyPV-integration-fees,npv:synergyPV-premium-integration-fees,cashflows};
+}

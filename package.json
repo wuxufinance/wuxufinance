@@ -1,1 +1,1 @@
-{"name":"zhiben-finance-learning","private":true,"type":"module","engines":{"node":">=22"},"scripts":{"test":"node tests/math.test.mjs && node tests/platform.test.mjs && node scripts/verify-public.mjs"}}
+{"name":"wuxu-finance-learning","private":true,"type":"module","engines":{"node":">=22"},"scripts":{"test":"node tests/math.test.mjs && node tests/platform.test.mjs && node scripts/verify-public.mjs"}}
