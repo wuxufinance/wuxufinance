@@ -1,0 +1,1 @@
+export const config = {"supabaseUrl":"https://rplkepzclatvshvzjejz.supabase.co","publishableKey":"sb_publishable_UpNxzqkFyCzcSoW7k1Bf2Q_ECNO_c-z","apiUrl":"https://rplkepzclatvshvzjejz.supabase.co/functions/v1/finance-api"};
