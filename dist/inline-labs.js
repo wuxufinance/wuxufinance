@@ -1,3 +1,4 @@
+import {advancedLabs} from './advanced-labs.js';
 // All money inputs use 万元; rates use percentages. These are teaching models.
 const n=x=>Number(x).toLocaleString('zh-CN',{maximumFractionDigits:2});
 const p=x=>n(x*100)+'%';
@@ -18,5 +19,6 @@ export const inlineLabs={
  committee:lab('并购投资委员会压力测试',[f('目标EBITDA','ebitda',1500),f('EBITDA压力降幅','decline',20,0,100,'%'),f('退出估值倍数','multiple',8,0,100,'倍'),f('净债务','debt',4000),f('收购股权对价','price',9000,.01),f('净协同现值','synergy',1000,-1e10)],d=>{const value=d.ebitda*(1-d.decline/100)*d.multiple-d.debt+d.synergy;return [['压力下EBITDA',n(d.ebitda*(1-d.decline/100))+' 万元'],['压力情景股权价值',n(value)+' 万元'],['相对收购价变化',p(value/d.price-1)]];},'静态情景估值，不是持有期年化回报或完整投委会结论。协同为扣整合成本后现值，未建模后续债务变化。'),
  hedge:lab('多资产对冲压力测试',[f('组合净资产','nav',10000,.01),f('股票多头名义金额','long',10000),f('指数空头名义金额','short',5000),f('多头股票价格变化','longReturn',-20,-100,1000,'%'),f('指数价格变化','indexReturn',-15,-100,1000,'%'),f('其他资产盈亏','other',0,-1e10)],d=>{const long=d.long*d.longReturn/100,short=-d.short*d.indexReturn/100,total=long+short+d.other;return [['多头盈亏',n(long)+' 万元'],['指数空头盈亏',n(short)+' 万元'],['组合盈亏',n(total)+' 万元'],['相对净资产回报',p(total/d.nav)]];},'线性价格冲击，未计基差、融资、借券、保证金与非线性风险；对冲仍可能亏损超过初始净资产。')
 };
+Object.assign(inlineLabs,advancedLabs);
 export const legacyLabNames={'股权融资模拟器':'equity','企业资本成本计算器':'wacc','IPO发行模拟器':'ipo','企业偿债压力测试':'debt','五年期DCF估值计算器':'dcf','并购溢价与协同价值模拟器':'synergy','股票支付并购EPS模拟器':'eps','私募股权LBO收益模拟器':'lbo','Sources & Uses融资结构计算器':'sources','QoE正常化盈利计算器':'qoe','投行顾问费模拟器':'fees','并购投资委员会压力测试':'committee','多资产对冲压力测试':'hedge'};
 export function runInlineLab(key,data){const item=inlineLabs[key];if(!item)throw Error('未知计算工具。');for(const field of item.fields){const v=data[field.key];if(!Number.isFinite(v)||v<field.min||v>field.max)throw Error('请检查输入范围：'+field.label);if(field.key==='years'&&!Number.isInteger(v))throw Error('持有年限请使用整数。');}const stats=item.run(data);for(const [,v] of stats)if(/NaN|Infinity/.test(v))throw Error('当前输入无法计算，请检查分母。');return stats;}

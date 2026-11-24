@@ -2,7 +2,8 @@ import katex from './vendor/katex.mjs';
 import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const formulaOptions={output:'mathml',displayMode:true,throwOnError:true,trust:false,strict:'ignore',maxExpand:1000,maxSize:30};
-export function mathHTML(source){return katex.renderToString(source.trim().replace(/^公式[：:]\s*/,''),formulaOptions);}
+const decodeMath=s=>s.replace(/&(?:amp|lt|gt|quot|apos|#39|#34);/g,m=>({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&#34;':'"'}[m]));
+export function mathHTML(source){return katex.renderToString(decodeMath(source).trim().replace(/^公式[：:]\s*/,''),formulaOptions);}
 export function renderFormulaLines(source){return String(source).split(/\n/).filter(x=>x.trim()).map(line=>{try{return '<div class="readable-formula">'+mathHTML(line)+'</div>';}catch{return '<div class="formula-fallback">'+esc(line)+'</div>';}}).join('');}
 function importedParagraphs(value){
   const chunks=[];let pending='';
@@ -38,7 +39,7 @@ export function normalizeBody(source,document){
   const notice='以下为原课示例快照；实时计算请使用本讲「互动实验」。';
   for(const p of root.querySelectorAll('p'))if(/^互动工具：[a-z]+$/.test(p.textContent)&&p.previousElementSibling?.textContent===notice)p.previousElementSibling.textContent='调整下面的参数，观察计算结果如何变化。';
   for(const p of [...root.querySelectorAll('p')])if(p.textContent===notice&&p.nextElementSibling?.textContent.startsWith('案例演示：')&&p.nextElementSibling.nextElementSibling?.textContent===notice)p.remove();
-  return root.innerHTML;
+  return root.innerHTML.replace(/'/g,'&#39;');
 }
 function labHTML(key){const lab=inlineLabs[key];if(!lab)return '';return `<section class="inline-lab" data-inline-lab="${key}"><h4>${esc(lab.title)}</h4><form class="inline-lab-form"><div class="field-grid">${lab.fields.map(f=>`<label class="input-field"><span>${esc(f.label)}${f.unit?'（'+esc(f.unit)+'）':''}</span><input type="number" name="${f.key}" value="${f.value}" min="${f.min}" max="${f.max}" step="any" required></label>`).join('')}</div><button class="button secondary compact" type="reset">恢复示例参数</button></form><div class="inline-lab-result" aria-live="polite"></div><p class="small">${esc(lab.note)}</p></section>`;}
 export function renderBody(source,document=globalThis.document){

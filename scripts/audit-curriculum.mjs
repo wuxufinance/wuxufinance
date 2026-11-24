@@ -1,7 +1,7 @@
 // Private curriculum exports must stay outside the public repository.
 import {readFile} from 'node:fs/promises';
 import {parseHTML} from 'linkedom';
-import {validateCourse} from '../server/validation.mjs';
+import {validateCourse,safeBody} from '../server/validation.mjs';
 import {renderBody,normalizeBody} from '../dist/course-content.js';
 const path=process.argv[2];if(!path)throw Error('Provide the path to a private curriculum JSON export.');
 const rows=JSON.parse(await readFile(path,'utf8'));const {document}=parseHTML('<html><body></body></html>');
@@ -11,7 +11,7 @@ for(const row of rows){const course=row.payload||row;try{validateCourse(course);
     const add=message=>issues.push('第'+course.id+'讲 '+unit.title+'：'+message);
     if(root.querySelector('.formula-fallback'))add('公式无法排版');
     if([...root.childNodes].some(n=>n.nodeType===3&&n.textContent.trim()))add('存在散落文字');
-    if(normalizeBody(unit.body,document)!==unit.body)add('尚未完成结构归一化');
+    if(safeBody(normalizeBody(unit.body,document))!==safeBody(unit.body))add('尚未完成结构归一化');
     for(const node of root.querySelectorAll('p,td,li'))if(!node.querySelector('math')&&/\\[a-zA-Z]+/.test(node.textContent))add('存在未渲染公式');
   }
 }

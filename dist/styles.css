@@ -39,3 +39,6 @@
 @media(max-width:600px){.inline-lab{padding:1rem}.inline-lab .field-grid,.inline-lab-result{grid-template-columns:1fr}.course-table table{font-size:.95rem}}
 .course-preview{width:min(1000px,94vw);max-height:90vh;padding:1.5rem;border:1px solid #dbe5df;border-radius:12px;overflow:auto}.course-preview article{border-top:1px solid #dbe5df;padding:1rem 0}.course-preview::backdrop{background:#143e3570}
 .prose{min-width:0;overflow-wrap:anywhere}.readable-formula{display:block;min-width:0;box-sizing:border-box}.course-table{width:100%;box-sizing:border-box}.inline-lab{min-width:0;box-sizing:border-box}
+
+/* Allow rich lessons to shrink inside the single-column mobile grid. */
+.reading-body{min-width:0}.concept-article,.prose{min-width:0;overflow-wrap:anywhere}
