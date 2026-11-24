@@ -1,1 +1,18 @@
-{"name":"wuxu-finance-learning","private":true,"type":"module","engines":{"node":">=22"},"scripts":{"test":"node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node scripts/verify-public.mjs"}}
+{
+  "name": "wuxu-finance-learning",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node tests/content.test.mjs && node scripts/verify-public.mjs",
+    "audit:courses": "node scripts/audit-curriculum.mjs"
+  },
+  "dependencies": {
+    "katex": "0.19.1"
+  },
+  "devDependencies": {
+    "linkedom": "0.18.12"
+  }
+}

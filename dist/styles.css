@@ -19,3 +19,23 @@
 @media(max-width:760px){.page-heading{flex-wrap:wrap;gap:13px}.page-heading>div:first-child{flex-basis:100%}.page-heading>.button{margin-top:0}.page-heading>.button-row{flex-direction:row}.page-heading h1{font-size:25px}.hero-meta{gap:9px;font-size:11px}}
 
 .knowledge-visual{display:flex;flex-direction:column;justify-content:center;gap:24px}.hero-map-label{color:#c4dfb1;font-size:12px;letter-spacing:.12em}.hero-steps{list-style:none;padding:0;margin:0;display:grid;gap:22px}.hero-steps li{display:flex;align-items:center;gap:16px}.hero-steps li>span{display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border:1px solid #739a7e;border-radius:12px;color:#c8e2a8;font-size:13px}.hero-steps b{display:block;color:#f2f6ed;font-size:18px;margin-bottom:6px}.hero-steps small{display:block;color:#bdcec2;font-size:12px;line-height:1.6}.knowledge-visual .visual-caption{position:static;text-align:left}
+/* Structured curriculum: tables, native MathML and inline teaching tools. */
+.course-table{max-width:100%;margin:1.25rem 0;border:1px solid var(--border,#dbe5df);border-radius:10px;overflow-x:auto}
+.course-table table{border-collapse:collapse;width:100%;min-width:420px;font-size:1rem}
+.course-table th,.course-table td{padding:.75rem 1rem;border-bottom:1px solid #dbe5df;text-align:left;vertical-align:top;line-height:1.65;min-width:130px}
+.course-table th{background:#edf4ed;color:#143e35;font-weight:650}
+.course-table td p,.course-table th p{margin:0!important}
+.readable-formula{overflow-x:auto;max-width:100%;padding:.65rem .25rem;font-size:1.1rem;line-height:1.8}
+.readable-formula math{font-size:1.1em;text-align:left;white-space:nowrap}
+.readable-formula .katex-mathml{display:block}
+.formula-content{min-width:0}.formula-fallback{white-space:pre-wrap;overflow-wrap:anywhere}
+.inline-lab{padding:1.4rem;background:#f1f7f1;border:1px solid #cee0cf;border-radius:12px;margin:1.5rem 0}
+.inline-lab h4{margin:0 0 1rem;font-size:1.15rem;color:#143e35}
+.inline-lab input{width:100%;min-width:0;box-sizing:border-box;padding:.6rem .7rem;border:1px solid #b8ccbd;border-radius:6px;background:white;font:inherit;color:#173e33}
+.inline-lab .field-grid{margin-bottom:1rem;grid-template-columns:repeat(2,minmax(0,1fr))}
+.inline-lab-result{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:1rem 0}
+.inline-lab-result>div{display:flex;flex-direction:column;gap:.3rem;padding:.7rem;background:white;border-radius:8px}
+.inline-lab-result strong{font-size:1.15rem;color:#173e33}.inline-lab-result span{font-size:.9rem}
+@media(max-width:600px){.inline-lab{padding:1rem}.inline-lab .field-grid,.inline-lab-result{grid-template-columns:1fr}.course-table table{font-size:.95rem}}
+.course-preview{width:min(1000px,94vw);max-height:90vh;padding:1.5rem;border:1px solid #dbe5df;border-radius:12px;overflow:auto}.course-preview article{border-top:1px solid #dbe5df;padding:1rem 0}.course-preview::backdrop{background:#143e3570}
+.prose{min-width:0;overflow-wrap:anywhere}.readable-formula{display:block;min-width:0;box-sizing:border-box}.course-table{width:100%;box-sizing:border-box}.inline-lab{min-width:0;box-sizing:border-box}
