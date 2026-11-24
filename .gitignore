@@ -9,3 +9,7 @@ dist/qa-responsive.html
 !.env.example
 *.pem
 *.key
+
+.openai/
+qa-*
+dist/qa-*

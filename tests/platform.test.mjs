@@ -7,6 +7,7 @@ assert.throws(()=>validateCourse({...fixture,sections:[]}),/知识单元/);
 const wrong=structuredClone(fixture);wrong.quiz[0].section='missing';assert.throws(()=>validateCourse(wrong),/关联单元/);
 assert.ok(!safeBody('<img src=x onerror=alert(1)><strong onclick=x>text</strong>').includes('<img'));
 assert.ok(!safeBody('<p onclick=x>text</p>').includes('<p onclick'));
+assert.equal(safeBody('<p>5 &lt; 10 &amp; 8</p>'),'<p>5 &lt; 10 &amp; 8</p>');
 const clean=sanitizeState({version:1,courses:{11:{read:['concept-0','missing'],answers:{q0:1,q1:100},best:999}},notes:{11:'my note'},bookmarks:['11:concept-0','999:secret'],last:11},[{...fixture,revision:1}]);
 assert.equal(clean.courses[11].best,0);assert.deepEqual(clean.courses[11].read,['concept-0']);assert.deepEqual(clean.courses[11].answers,{q0:1});assert.deepEqual(clean.bookmarks,['11:concept-0']);
 const base={courses:{11:{read:['a'],answers:{}}},notes:{11:'old'},bookmarks:['11:a'],reviews:[],last:11};

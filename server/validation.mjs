@@ -1,7 +1,7 @@
 export const calculators=['purchasing','credit','compound','fx','inflation','balance','liquidity','portfolio','valuation','bond'];
 const plain=(value,label,max=400)=>{if(typeof value!=='string'||!value.trim()||value.length>max||/[<>]/.test(value))throw new Error(label+'需要有效纯文本');return value.trim();};
 const text=(value,max=10000)=>typeof value==='string'?value.slice(0,max):'';
-const htmlEscape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const htmlEscape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])).replace(/&amp;((?:#\d{1,7}|#x[a-f\d]{1,6}|amp|lt|gt|quot|apos|nbsp));/gi,'&$1;');
 export function safeBody(value){
   if(typeof value!=='string'||!value.trim()||value.length>60000)throw new Error('正文为空或过长');
   const allowed=/^(<\/?(?:p|strong|em|ul|ol|li)>|<br\s*\/?>)$/i;
