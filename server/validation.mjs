@@ -1,4 +1,4 @@
-export const calculators=['purchasing','credit','compound','fx','inflation','balance','liquidity','portfolio','valuation','bond','institution','acquisition'];
+export const calculators=['purchasing','credit','compound','fx','inflation','balance','liquidity','portfolio','valuation','bond','institution','acquisition','bank','markets','macro','policy','fiscal','global','option','risk','behavior','corporate','pricing','quant','fund','regulation'];
 const plain=(value,label,max=400)=>{if(typeof value!=='string'||!value.trim()||value.length>max||/[<>]/.test(value))throw new Error(label+'需要有效纯文本');return value.trim();};
 const text=(value,max=10000)=>typeof value==='string'?value.slice(0,max):'';
 const htmlEscape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])).replace(/&amp;((?:#\d{1,7}|#x[a-f\d]{1,6}|amp|lt|gt|quot|apos|nbsp));/gi,'&$1;');
@@ -19,7 +19,7 @@ export function validateCourse(input){
   if(!Array.isArray(input.cases)||input.cases.length<1||input.cases.length>40)throw new Error('请至少添加一个生活案例');
   c.cases=input.cases.map(k=>({title:plain(k.title,'案例标题',200),body:safeBody(k.body),takeaway:plain(k.takeaway,'案例启示',1000)}));
   if(!Array.isArray(input.quiz)||input.quiz.length<3||input.quiz.length>100)throw new Error('每讲需要 3 至 100 道测试题');
-  c.quiz=input.quiz.map(q=>{if(!/^[a-z][a-z0-9-]{0,60}$/.test(q.id)||!Array.isArray(q.options)||q.options.length<2||q.options.length>3||!Number.isInteger(q.correct)||q.correct<0||q.correct>=q.options.length||!c.sections.some(s=>s.id===q.section))throw new Error('题目编号、答案或关联单元无效');return {id:q.id,q:plain(q.q,'题干',1200),options:q.options.map(o=>plain(o,'选项',1000)),correct:q.correct,explain:plain(q.explain,'解析',4000),section:q.section};});
+  c.quiz=input.quiz.map(q=>{if(!/^[a-z][a-z0-9-]{0,60}$/.test(q.id)||!Array.isArray(q.options)||q.options.length<2||q.options.length>4||!Number.isInteger(q.correct)||q.correct<0||q.correct>=q.options.length||!c.sections.some(s=>s.id===q.section))throw new Error('题目编号、答案或关联单元无效');return {id:q.id,q:plain(q.q,'题干',1200),options:q.options.map(o=>plain(o,'选项',1000)),correct:q.correct,explain:plain(q.explain,'解析',4000),section:q.section};});
   if(new Set(c.quiz.map(q=>q.id)).size!==c.quiz.length)throw new Error('题目编号重复');
   return c;
 }

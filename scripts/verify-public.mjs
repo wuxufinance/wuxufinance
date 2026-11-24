@@ -1,5 +1,5 @@
 import {readdir,readFile} from 'node:fs/promises';
-const expected=new Set(['.nojekyll','index.html','admin.html','app.js','admin.js','platform.js','bootstrap.js','state-merge.js','courses.js','config.js','math.js','styles.css','platform.css','favicon.svg']);
+const expected=new Set(['.nojekyll','index.html','admin.html','app.js','admin.js','platform.js','bootstrap.js','state-merge.js','courses.js','config.js','math.js','topic-labs.js','styles.css','platform.css','favicon.svg']);
 for(const name of await readdir(new URL('../dist/',import.meta.url))){
   if(!expected.has(name))throw Error('Unexpected public file: '+name);
   const source=await readFile(new URL('../dist/'+name,import.meta.url),'utf8');

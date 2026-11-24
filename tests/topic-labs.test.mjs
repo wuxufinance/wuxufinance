@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {topicLabs,runTopicLab} from '../dist/topic-labs.js';
+const defaults=key=>Object.fromEntries(topicLabs[key].fields.map(([,name,value])=>[name,value]));
+const value=(key,patch,index=0)=>runTopicLab(key,{...defaults(key),...patch}).stats[index][1];
+for(const key of Object.keys(topicLabs)){const result=runTopicLab(key,defaults(key));assert.ok(result.stats.length>=2);assert.ok(result.note);assert.ok(result.stats.every(([,s])=>!s.includes('NaN')&&!s.includes('Infinity')));}
+assert.equal(value('bank',{}),'1,000.00 万元');
+assert.equal(value('markets',{}),'2,425.00 万元');
+assert.equal(value('macro',{}),'1,020.00 亿元');
+assert.equal(value('global',{assetReturn:0,initialFx:9,endFx:9}),'0.00%');
+assert.equal(value('global',{assetReturn:10,initialFx:10,endFx:9}),'-1.00%');
+assert.equal(value('option',{spot:110,strike:100,premium:8,quantity:100}),'200.00 元');
+assert.equal(value('option',{spot:90,strike:100,premium:8,quantity:100},1),'200.00 元');
+assert.equal(value('behavior',{drawdown:50},1),'100.00%');
+assert.ok(value('behavior',{drawdown:100},1).includes('归零'));
+assert.equal(value('corporate',{initial:1000,cashflow:200,years:5,equityCost:0,debtCost:0},1),'0.00 万元');
+assert.equal(value('fund',{}),'200.00 万元');
+assert.equal(value('fund',{},1),'100.00 万元');
+assert.equal(value('fund',{},3),'9.00%');
+assert.equal(value('regulation',{}),'12.50%');
+assert.throws(()=>runTopicLab('bank',{...defaults('bank'),rr:0}));
+assert.throws(()=>runTopicLab('corporate',{...defaults('corporate'),years:2.5}));
+console.log('Passed: 14 topic models, currency compounding, options, drawdown recovery, zero-rate NPV, fees, and capital/liquidity ratios.');

@@ -18,5 +18,6 @@ jobs:
           node --check dist/admin.js
           node --check server/api.mjs
           node tests/math.test.mjs
+          node tests/topic-labs.test.mjs
           node tests/platform.test.mjs
           node scripts/verify-public.mjs
