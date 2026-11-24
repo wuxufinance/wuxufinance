@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHandler} from '../server/api.mjs';
-import {safeBody,validateCourse,sanitizeState,mergeState} from '../server/validation.mjs';
+import {safeBody,validateCourse,sanitizeState,mergeState,preserveHiddenState} from '../server/validation.mjs';
 const fixture={id:11,title:'新增课程',subtitle:'理解一个新问题',category:'金融知识',description:'用于校验课程扩展',minutes:30,keywords:['复习'],calculator:'compound',sections:Array.from({length:4},(_,i)=>({id:'concept-'+i,title:'知识单元'+i,body:'<p>通俗讲解。</p>'})),cases:[{title:'案例',body:'<p>生活案例。</p>',takeaway:'理解原理。'}],quiz:Array.from({length:3},(_,i)=>({id:'q'+i,q:'选择正确答案',options:['A','B','C'],correct:1,explain:'原因',section:'concept-0'}))};
 assert.equal(validateCourse(fixture).id,11);
 assert.throws(()=>validateCourse({...fixture,sections:[]}),/知识单元/);
@@ -14,6 +14,10 @@ const base={courses:{11:{read:['a'],answers:{}}},notes:{11:'old'},bookmarks:['11
 const local=structuredClone(base);local.courses[11].read=[];local.notes[11]='my update';
 const remote=structuredClone(base);remote.courses[11].read=['a','b'];remote.notes[11]='other update';remote.bookmarks.push('11:b');
 const merged=mergeState(base,local,remote);assert.deepEqual(merged.courses[11].read,['b']);assert.equal(merged.notes[11],'my update');assert.deepEqual(merged.bookmarks,['11:a','11:b']);
+const archived={courses:{10:{read:['old'],best:12}},notes:{10:'keep my note'},bookmarks:['10:all'],reviews:['10:old']};
+const retained=preserveHiddenState(structuredClone(clean),archived,[fixture]);
+assert.equal(retained.notes[10],'keep my note');assert.equal(retained.courses[10].best,12);assert.ok(retained.bookmarks.includes('10:all'));
+assert.equal(preserveHiddenState(structuredClone(clean),{...archived,notes:{11:'old note'}},[fixture]).notes[11],'my note');
 const uid='11111111-1111-4111-8111-111111111111',sid='22222222-2222-4222-8222-222222222222';
 const jwt='header.'+Buffer.from(JSON.stringify({sub:uid,session_id:sid})).toString('base64url')+'.signature';
 let calls=[];

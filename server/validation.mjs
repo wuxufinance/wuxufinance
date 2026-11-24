@@ -50,3 +50,10 @@ export function mergeState(base,local,remote){
   for(const [id,note] of Object.entries(local.notes||{}))if(note!==base.notes?.[id])copy.notes[id]=note;
   copy.last=local.last;return copy;
 }
+export function preserveHiddenState(clean,previous,courses){
+  const visible=new Set(courses.map(c=>String(c.id)));
+  for(const [id,r] of Object.entries(previous?.courses||{}))if(!visible.has(id))clean.courses[id]=r;
+  for(const [id,note] of Object.entries(previous?.notes||{}))if(!visible.has(id))clean.notes[id]=note;
+  for(const key of ['bookmarks','reviews'])clean[key]=[...new Set([...clean[key],...(previous?.[key]||[]).filter(v=>!visible.has(String(v).split(':')[0]))])];
+  return clean;
+}

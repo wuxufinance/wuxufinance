@@ -1,4 +1,4 @@
-import {validateCourse,sanitizeState} from './validation.mjs';
+import {validateCourse,sanitizeState,preserveHiddenState} from './validation.mjs';
 const messages={AUTH_REQUIRED:'请先登录。',SESSION_EXPIRED:'登录已过期，请重新登录。',ACCOUNT_RESTRICTED:'账号正在等待审核或已暂停。',DEVICE_RESTRICTED:'此浏览器尚未获得授权，或授权已被撤销。',ADMIN_REQUIRED:'只有管理员可以执行此操作。',DEVICE_LIMIT:'已达到此账号的设备数量上限，请先撤销其他设备。',KEEP_OWN_ACCESS:'请保留当前管理员账号与浏览器的访问权限。',REVOKE_EXTRA_DEVICES:'请先撤销多余设备，再降低数量上限。',COURSE_UPDATED:'课程已更新，请刷新后再操作。',QUIZ_INCOMPLETE:'请完成所有题目后提交。',SETUP_INVALID:'管理员开通链接无效或已经使用。',SETUP_BUSY:'管理员开通正在处理，请稍后重试。',COURSE_NOT_FOUND:'课程不存在或尚未发布。'};
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
@@ -52,7 +52,8 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
       if(action==='state_save'){
         const all=await command('courses');
         if(!Number.isInteger(body.revision)||body.revision<0)throw new Error('学习记录版本无效。');
-        const state=sanitizeState(body.state,all.courses);
+        const previous=await command('state_get');
+        const state=preserveHiddenState(sanitizeState(body.state,all.courses),previous.state,all.courses);
         return reply(await command('state_save',{state,revision:body.revision}));
       }
       if(action==='quiz_submit'){

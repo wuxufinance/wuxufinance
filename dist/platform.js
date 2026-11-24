@@ -76,6 +76,7 @@ export async function showGate(admin=false){
     }
     const [curriculum,saved]=await Promise.all([api('courses'),api('state_get')]);
     if(!curriculum.courses.length)throw new Error('课程尚未发布，请稍后再来。');setCurriculum(curriculum);
+    if(!curriculum.courses.some(c=>c.id===saved.state.last))saved.state.last=curriculum.courses.at(-1).id;
     platform.state=saved.state;revision=saved.revision;baseState=structuredClone(saved.state);
     const pending=localStorage.getItem(platform.storageKey+':pending');if(pending){try{const local=JSON.parse(pending),old=JSON.parse(localStorage.getItem(platform.storageKey+':base')||'{}');platform.state=mergeState(old,local,saved.state);platform.saveState(platform.state);}catch{}}localStorage.setItem(platform.storageKey,JSON.stringify(platform.state));
     $('#app').innerHTML='';
