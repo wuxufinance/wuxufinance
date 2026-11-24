@@ -22,8 +22,8 @@
 
 ## 部署
 
-1. GitHub 仓库设置中的 Pages 使用 GitHub Actions 作为发布来源。
-2. 主分支每次更新后，工作流会验证代码和公开文件边界，再发布 `dist/`。
+1. GitHub Pages 的发布来源为 `gh-pages` 分支根目录。
+2. 主分支更新后，工作流自动验证代码和公开文件边界，只使用读取权限。界面源码需要发布时，将通过检查的 `dist/` 同步到 `gh-pages`；课程正文从后台更新，不需要触发网页重新发布。
 3. Edge API 的源码在 `server/`，函数名 `finance-api`。函数在内部验证 Supabase Auth 用户、数据库会话、账号状态和浏览器凭据；网关的 `verify_jwt=false` 是为首次开通接口及现代发布密钥使用，受保护操作仍全部在函数内部认证。
 4. `server/schema.sql` 是数据库初始结构。所有表对浏览器角色拒绝访问，RPC 只授予后端 service role。不要把后端密钥放进 `dist/config.js`。
 
