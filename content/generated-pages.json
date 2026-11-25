@@ -1,0 +1,456 @@
+[
+  {
+    "path": "",
+    "file": "index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/",
+    "title": "金融学习与长期投资：从基础知识到家庭和宏观研究",
+    "description": "戊戌金融学习网站，提供金融经济学基础、个人投资与长期财富管理、全球宏观研究三套课程，以及带公式、案例和来源的公开专题与计算工具。"
+  },
+  {
+    "path": "courses/",
+    "file": "courses/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/",
+    "title": "金融课程目录：选择基础、个人财富或全球宏观学习路径",
+    "description": "浏览戊戌三套课程的定位、学习顺序和43讲已发布课程。基础总课程40讲，个人财富管理与全球宏观研究各规划30讲。"
+  },
+  {
+    "path": "courses/foundations/",
+    "file": "courses/foundations/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/",
+    "title": "金融经济学基础课程目录：学习目标、顺序与完整规划",
+    "description": "从钱为什么被接受讲起，依次连接信用、利率、通胀、资产负债表、股债投资、宏观政策与专业金融机构。用同一套语言理解资金如何流动、价格如何形成，以及风险怎样传导。"
+  },
+  {
+    "path": "courses/personal-wealth/",
+    "file": "courses/personal-wealth/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/personal-wealth/",
+    "title": "个人投资与财富管理课程目录：学习目标、顺序与完整规划",
+    "description": "以个人和家庭的目标、现金流与承受能力为起点，逐步学习财务安全、全球投资工具、长期资产配置、投资纪律与退休规划。先看清财务现状，再讨论资金可以承担多少波动。"
+  },
+  {
+    "path": "courses/global-macro/",
+    "file": "courses/global-macro/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/global-macro/",
+    "title": "全球宏观投资研究课程目录：学习目标、顺序与完整规划",
+    "description": "从经济数据库和研究框架开始，学习增长、通胀、就业、政策、市场预期与跨资产定价的联系。强调统计口径、历史数据版本、情景假设和观点失效条件，逐步建立可验证的研究流程。"
+  },
+  {
+    "path": "courses/foundations/lesson-01/",
+    "file": "courses/foundations/lesson-01/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-01/",
+    "title": "货币是什么：理解交换、信用与购买力",
+    "description": "货币的课程介绍：从一杯咖啡的交易开始，理解钱为什么能被接受，以及钱与财富之间的关系。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-02/",
+    "file": "courses/foundations/lesson-02/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-02/",
+    "title": "信用如何形成：理解借贷、承诺与违约",
+    "description": "信用的课程介绍：理解信用如何把未来收入带到今天，也看清借贷背后的责任与成本。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-03/",
+    "file": "courses/foundations/lesson-03/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-03/",
+    "title": "利率与折现：看懂资金的时间价格",
+    "description": "利率的课程介绍：用简单的时间旅行，弄懂单利、复利、实际利率与资产价格。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-04/",
+    "file": "courses/foundations/lesson-04/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-04/",
+    "title": "汇率如何变化：理解升贬值与换汇成本",
+    "description": "汇率的课程介绍：从换汇和旅行账单出发，看懂标价方式、升贬值与汇率风险。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-05/",
+    "file": "courses/foundations/lesson-05/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-05/",
+    "title": "通货膨胀：区分涨价速度与真实购买力",
+    "description": "通货膨胀的课程介绍：区分物价水平与涨价速度，理解通胀、通缩与不同资产的处境。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-06/",
+    "file": "courses/foundations/lesson-06/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-06/",
+    "title": "资产负债表：算清家庭净资产与现金流",
+    "description": "资产、负债与净资产的课程介绍：为家庭拍一张财务快照，再用现金流看清日常生活能否持续。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-07/",
+    "file": "courses/foundations/lesson-07/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-07/",
+    "title": "流动性：需要用钱时能否及时拿到",
+    "description": "流动性的课程介绍：把“值多少钱”与“多久能变成钱”分开，理解挤兑与被迫出售。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-08/",
+    "file": "courses/foundations/lesson-08/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-08/",
+    "title": "风险与收益：理解波动、回撤与分散投资",
+    "description": "风险与收益的课程介绍：认识波动、回撤与分散投资，学会把收益和承担的风险放在一起比较。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-09/",
+    "file": "courses/foundations/lesson-09/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-09/",
+    "title": "股票与股权：从一部分生意理解投资",
+    "description": "股票与股权的课程介绍：从股东身份出发，连接企业盈利、股票价格与买入时的估值。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-10/",
+    "file": "courses/foundations/lesson-10/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-10/",
+    "title": "债券与债券基金：看懂定价、久期与亏损风险",
+    "description": "债券与债券市场的课程介绍：债券是借条，但它的价格并不安静。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-11/",
+    "file": "courses/foundations/lesson-11/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-11/",
+    "title": "银行与货币创造：贷款如何形成存款",
+    "description": "银行与银行体系：银行是如何创造货币的？的课程介绍：银行的贷款如何形成存款，放贷又受哪些约束？ 本讲延续原课程的通俗讲解与完整知识路径，结合生活案例、核心公式、互动计算和随堂练习，把概念连接成可应用的判断。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-12/",
+    "file": "courses/foundations/lesson-12/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-12/",
+    "title": "金融市场与资金流动：连接机构、交易与价格",
+    "description": "金融市场与金融体系：全球的资金究竟是如何流动的？的课程介绍：钱从谁手中流向谁，市场和机构各起什么作用？ 本讲延续原课程的通俗讲解与完整知识路径，结合生活案例、核心公式、互动计算和随堂练习，把概念连接成可应用的判断。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-13/",
+    "file": "courses/foundations/lesson-13/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-13/",
+    "title": "宏观经济与周期：从GDP、就业和物价读懂经济",
+    "description": "宏观经济学与经济周期：一个国家的经济是如何运行的？的课程介绍：从GDP、就业和价格变化，建立经济周期的判断框架。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-14/",
+    "file": "courses/foundations/lesson-14/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-14/",
+    "title": "中央银行与货币政策：理解利率、流动性与预期",
+    "description": "中央银行与货币政策体系的课程介绍：利率、流动性与预期，怎样把政策传递到经济中？ 本讲延续原课程的通俗讲解与完整知识路径，结合生活案例、核心公式、互动计算和随堂练习，把概念连接成可应用的判断。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-15/",
+    "file": "courses/foundations/lesson-15/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-15/",
+    "title": "财政政策与政府债务：看懂收支、乘数与风险",
+    "description": "财政政策与政府债务体系的课程介绍：政府收支、财政乘数与债务，如何一起理解？ 本讲延续原课程的通俗讲解与完整知识路径，结合生活案例、核心公式、互动计算和随堂练习，把概念连接成可应用的判断。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-16/",
+    "file": "courses/foundations/lesson-16/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-16/",
+    "title": "国际金融与国际收支：连接汇率与跨境资本",
+    "description": "国际金融与国际收支体系的课程介绍：把汇率、国际收支与跨境资本连接起来。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-17/",
+    "file": "courses/foundations/lesson-17/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-17/",
+    "title": "金融危机与风险传导：理解信用、杠杆与流动性",
+    "description": "金融危机与金融风险传导体系的课程介绍：风险怎样从一个机构，传到整个金融体系？ 本讲延续原课程的通俗讲解与完整知识路径，结合生活案例、核心公式、互动计算和随堂练习，把概念连接成可应用的判断。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-18/",
+    "file": "courses/foundations/lesson-18/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-18/",
+    "title": "投资组合与资产配置：把收益和风险放在一起",
+    "description": "投资组合理论与资产配置体系的课程介绍：让收益、相关性和风险约束共同决定配置。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-19/",
+    "file": "courses/foundations/lesson-19/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-19/",
+    "title": "金融衍生品基础：理解期货、期权与风险转移",
+    "description": "金融衍生品与风险对冲体系的课程介绍：理解远期、期货、期权和互换如何转移风险。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-20/",
+    "file": "courses/foundations/lesson-20/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-20/",
+    "title": "金融风险管理：从风险度量到压力测试",
+    "description": "金融风险管理与金融危机体系的课程介绍：从风险识别到度量、限额、对冲和压力测试。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-21/",
+    "file": "courses/foundations/lesson-21/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-21/",
+    "title": "行为金融与投资心理：识别认知偏差",
+    "description": "行为金融学与投资心理体系的课程介绍：识别认知偏差，为投资建立可执行的纪律。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-22/",
+    "file": "courses/foundations/lesson-22/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-22/",
+    "title": "衍生品定价与对冲：理解Greeks和风险边界",
+    "description": "金融衍生品与风险对冲体系的课程介绍：进一步理解衍生品定价、Greeks与动态对冲。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-23/",
+    "file": "courses/foundations/lesson-23/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-23/",
+    "title": "公司金融与估值：连接报表、现金流和资本成本",
+    "description": "公司金融、企业价值评估与财务分析体系的课程介绍：把财务报表、自由现金流、资本成本与估值串起来。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-24/",
+    "file": "courses/foundations/lesson-24/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-24/",
+    "title": "投资决策与市场心理：建立可检查的决策纪律",
+    "description": "行为金融学、市场心理与投资决策体系的课程介绍：用心理实验和决策规则，检查投资中的非理性。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-25/",
+    "file": "courses/foundations/lesson-25/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-25/",
+    "title": "量化投资与统计套利：理解数据、回测和交易成本",
+    "description": "量化金融、统计套利与系统化投资体系的课程介绍：把策略逻辑、数据、回测、交易成本和样本外检验连起来。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-26/",
+    "file": "courses/foundations/lesson-26/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-26/",
+    "title": "私募与对冲基金：看懂架构、收费与治理",
+    "description": "私募基金、对冲基金与专业资产管理机构运作体系的课程介绍：从基金架构、费用与治理，理解专业资产管理的运作。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-27/",
+    "file": "courses/foundations/lesson-27/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-27/",
+    "title": "投资银行与并购：理解融资、估值和交易执行",
+    "description": "投资银行、企业融资、并购重组与资本市场运作体系的课程介绍：理解融资、承销、估值、并购与资本市场执行。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-28/",
+    "file": "courses/foundations/lesson-28/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-28/",
+    "title": "金融监管与合规：理解牌照、审慎监管和客户保护",
+    "description": "金融监管、金融法律、合规管理与全球金融治理体系的课程介绍：让牌照、审慎监管、客户保护和机构治理各就其位。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-29/",
+    "file": "courses/foundations/lesson-29/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-29/",
+    "title": "全球金融市场：理解跨境配置与货币风险",
+    "description": "全球金融市场、跨境资本配置与国际投资体系的课程介绍：跨国家、跨货币、跨风险来源，构建全球投资框架。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-30/",
+    "file": "courses/foundations/lesson-30/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-30/",
+    "title": "金融机构经营：区分AUM、收入与自有资本",
+    "description": "金融机构经营管理、资本运作与全球投资集团体系的课程介绍：把金融机构当成一家需要长期生存的企业来理解：钱从哪里来、收入怎样形成、风险由谁承担、资本应该投向哪里。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-31/",
+    "file": "courses/foundations/lesson-31/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-31/",
+    "title": "产业资本与企业并购：算清协同、溢价与价值",
+    "description": "产业资本、金融资本、企业并购与资本战略体系的课程介绍：从一家咖啡店为什么收购另一家店开始，理解产业资本与金融资本如何连接。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-32/",
+    "file": "courses/foundations/lesson-32/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-32/",
+    "title": "全球经济与地缘经济：连接国家、产业与资本",
+    "description": "全球经济格局、地缘经济、国际资本竞争与国家经济战略体系的课程介绍：从比较优势和全球价值链出发，连接关税、能源、供应链、美元体系、主权财富基金、国家资产负债表和长期资本配置。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-33/",
+    "file": "courses/foundations/lesson-33/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-33/",
+    "title": "经济金融史与资本周期：辨认债务和技术的变化",
+    "description": "世界经济史、金融史、货币演变与全球资本周期体系的课程介绍：从古代商业信用到现代银行、股份制、工业革命、金本位、布雷顿森林体系、金融危机和技术资本周期。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-34/",
+    "file": "courses/foundations/lesson-34/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-34/",
+    "title": "全球宏观指标研究：从数据口径走向跨资产分析",
+    "description": "全球宏观经济分析、经济指标解读与跨资产投资研究体系的课程介绍：系统阅读GDP、通胀、就业、PMI、信用、收益率曲线与全球流动性；学习预期差、即时预测、宏观因子与跨资产传导。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-35/",
+    "file": "courses/foundations/lesson-35/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-35/",
+    "title": "资产定价与机构交易：把价值、成交和成本连起来",
+    "description": "全球金融资产定价、市场微观结构、机构交易与资本流动体系的课程介绍：连接无套利、SDF和风险溢价与订单簿、做市、ETF、指数再平衡、市场冲击及算法执行；深入证券借贷、回购、清算结算、跨市场价差和TCA。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-36/",
+    "file": "courses/foundations/lesson-36/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-36/",
+    "title": "机构投资组合管理：理解归因、风险预算与配置",
+    "description": "全球投资组合管理、机构绩效归因、风险预算与资本配置决策体系的课程介绍：把研究、配置、交易和绩效反馈连接成一个可检查的投资管理闭环。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-37/",
+    "file": "courses/foundations/lesson-37/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-37/",
+    "title": "金融工程与证券化：看懂现金流、分层和模型风险",
+    "description": "金融工程、结构化金融产品、资产证券化与机构产品设计体系的课程介绍：看懂现金流如何重构、损失如何分配，以及复杂产品背后的模型与履约风险。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-38/",
+    "file": "courses/foundations/lesson-38/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-38/",
+    "title": "财富管理与家族办公室：连接目标、治理与传承",
+    "description": "全球财富管理、私人银行、家族办公室与跨代财富传承体系的课程介绍：从家庭现金流出发，理解投资、保障、家族治理与财富传承如何协同。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-39/",
+    "file": "courses/foundations/lesson-39/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-39/",
+    "title": "金融科技与数字资产：理解权利、技术和风险",
+    "description": "金融科技、数字金融、区块链、数字资产与未来金融基础设施体系的课程介绍：沿着支付、数据、资产权利和风险管理，理解技术如何改变金融基础设施。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/foundations/lesson-40/",
+    "file": "courses/foundations/lesson-40/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/foundations/lesson-40/",
+    "title": "金融经济学综合实战：检验投资集团的资本与治理",
+    "description": "全球金融经济学综合体系、国际投资集团战略管理与资本运营实战的课程介绍：整合前四十讲，用经营、资本、现金流与治理共同检验一家投资集团。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/personal-wealth/lesson-01/",
+    "file": "courses/personal-wealth/lesson-01/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/personal-wealth/lesson-01/",
+    "title": "个人资产负债表：建立长期财富管理的起点",
+    "description": "从零建立个人资产负债表与财富管理体系的课程介绍：从收入、资产与负债出发，建立个人资产负债表、财务健康指标、压力测试与年度净资产复盘。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/personal-wealth/lesson-02/",
+    "file": "courses/personal-wealth/lesson-02/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/personal-wealth/lesson-02/",
+    "title": "家庭现金流与预算：建立储蓄和专项资金体系",
+    "description": "家庭现金流管理、预算与储蓄体系的课程介绍：延续第1讲的家庭案例，建立月度与年度预算、专项储蓄、预算差异和收入中断压力测试。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "courses/global-macro/lesson-01/",
+    "file": "courses/global-macro/lesson-01/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/courses/global-macro/lesson-01/",
+    "title": "宏观研究框架与经济数据库：建立可验证的研究流程",
+    "description": "建立专业宏观研究框架与全球经济数据库的课程介绍：独立30讲系列第1讲。查看学习目标、知识目录和关联阅读；全文与实验需登录。"
+  },
+  {
+    "path": "guides/",
+    "file": "guides/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/",
+    "title": "金融学习专题：从债基亏损到家庭现金流与GDP",
+    "description": "六篇完整金融学习专题，解释债券基金、利率、通胀、家庭资产负债表、现金流预算与GDP和股市的联系，附公式、模拟案例与官方来源。"
+  },
+  {
+    "path": "guides/bond-funds-losses/",
+    "file": "guides/bond-funds-losses/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/bond-funds-losses/",
+    "title": "债券基金为什么会亏钱：看懂利率、久期与净值",
+    "description": "用固定票息债券的定价案例，解释利率、信用、费用和赎回压力如何影响债券基金净值，区分票息、分红与持有期总回报。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "guides/interest-rates-asset-prices/",
+    "file": "guides/interest-rates-asset-prices/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/interest-rates-asset-prices/",
+    "title": "利率上涨如何影响资产价格：理解折现与预期",
+    "description": "从现金流现值、债券和股票估值案例出发，解释利率变化的定价机制，以及为什么资产价格不会机械地同涨同跌。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "guides/inflation-purchasing-power/",
+    "file": "guides/inflation-purchasing-power/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/inflation-purchasing-power/",
+    "title": "通胀与购买力：算清累计涨价和真实收益",
+    "description": "区分价格水平和通胀速度，用累计价格、现金购买力与实际收益率公式，解释同样的钱为什么可能买得更少。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "guides/household-balance-sheet/",
+    "file": "guides/household-balance-sheet/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/household-balance-sheet/",
+    "title": "家庭资产负债表怎么做：从估值到净资产与流动性",
+    "description": "按同一时点、同一币种整理资产和债务，用教学案例计算净资产、负债率与现金覆盖月数，避免把收入、授信和资产混在一起。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "guides/household-budget-cashflow/",
+    "file": "guides/household-budget-cashflow/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/household-budget-cashflow/",
+    "title": "家庭预算与现金流：算清月结余、年度支出和付款时间",
+    "description": "用月度与全年联动案例，区分必要支出、专项储蓄、投资转账和还贷本金，建立可执行的预算与现金流检查方法。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "guides/gdp-stock-market/",
+    "file": "guides/gdp-stock-market/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/guides/gdp-stock-market/",
+    "title": "GDP增长不等于股市上涨：理解盈利、预期与估值",
+    "description": "区分GDP与上市公司现金流，用增长预期差和股息估值案例，解释经济数据向股票价格传导时需要经过哪些环节。",
+    "lastmod": "2026-11-25"
+  },
+  {
+    "path": "tools/",
+    "file": "tools/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/",
+    "title": "金融计算工具：债券、购买力、家庭财务与增长率",
+    "description": "免费使用七个金融学习工具。每页都有输入单位、完整公式、默认示例与结果解释，覆盖债券价格、通胀、资产负债表、预算、现金流和经济增长率。"
+  },
+  {
+    "path": "tools/bond-price/",
+    "file": "tools/bond-price/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/bond-price/",
+    "title": "债券价格与利率风险计算器：使用说明、公式与结果解释",
+    "description": "输入票息、期限、收益率和付息频率，计算普通固定票息债券价格、修正久期，以及利率冲击后的重新定价。"
+  },
+  {
+    "path": "tools/purchasing-power/",
+    "file": "tools/purchasing-power/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/purchasing-power/",
+    "title": "通胀与真实购买力计算器：使用说明、公式与结果解释",
+    "description": "将名义财富变化与通胀放在同一期间，计算未来名义金额、按今天价格折算的购买力和真实年增长率。"
+  },
+  {
+    "path": "tools/household-balance/",
+    "file": "tools/household-balance/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/household-balance/",
+    "title": "家庭资产负债表计算器：使用说明、公式与结果解释",
+    "description": "按同一时点整理现金、投资、房产和债务，计算净资产、负债率、现金覆盖与应急资金安排。"
+  },
+  {
+    "path": "tools/household-budget/",
+    "file": "tools/household-budget/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/household-budget/",
+    "title": "家庭预算比例计算器：使用说明、公式与结果解释",
+    "description": "调整必要支出与可选消费比例，观察月度和年度财务目标拨款，并检查比例总和是否有效。"
+  },
+  {
+    "path": "tools/household-cashflow/",
+    "file": "tools/household-cashflow/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/household-cashflow/",
+    "title": "家庭现金流与年度储蓄计算器：使用说明、公式与结果解释",
+    "description": "把月收入、生活支出、还贷本息和年度专项支出联动，计算现金结余、未分配金额与不同口径的储蓄率。"
+  },
+  {
+    "path": "tools/annual-cashflow/",
+    "file": "tools/annual-cashflow/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/annual-cashflow/",
+    "title": "12个月家庭现金流预测工具：使用说明、公式与结果解释",
+    "description": "指定年度额外支出的付款月份，查看逐月现金、专项资金预留与最大未融资缺口，识别全年结余掩盖的时间风险。"
+  },
+  {
+    "path": "tools/growth-rates/",
+    "file": "tools/growth-rates/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/tools/growth-rates/",
+    "title": "经济增长率与年化转换计算器：使用说明、公式与结果解释",
+    "description": "按月度、季度或年度的正值水平计算增长率与复合年化增速，避免把GDP同比、环比和年化口径混用。"
+  },
+  {
+    "path": "about/",
+    "file": "about/index.html",
+    "url": "https://wuxufinance.github.io/wuxufinance/about/",
+    "title": "关于戊戌：内容方法、资料来源与学习访问说明",
+    "description": "了解戊戌金融学习网站的定位、资料核对方式、教学模拟与历史案例的区别，以及公开内容和受控学习空间的访问安排。"
+  }
+]

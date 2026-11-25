@@ -14,17 +14,11 @@ jobs:
       - name: Validate application, calculators and access boundaries
         run: |
           npm ci
+          npm run build
           node --check dist/app.js
           node --check dist/platform.js
           node --check dist/admin.js
           node --check server/api.mjs
-          node tests/math.test.mjs
-          node tests/topic-labs.test.mjs
-          node tests/platform.test.mjs
-          node tests/content.test.mjs
-          node tests/advanced-labs.test.mjs
-          node tests/professional-labs.test.mjs
-          node tests/source-figures.test.mjs
-          node tests/wealth.test.mjs
-          node tests/macro.test.mjs
-          node scripts/verify-public.mjs
+          node --check dist/public-tools.js
+          npm test
+          git diff --exit-code -- dist content/generated-pages.json

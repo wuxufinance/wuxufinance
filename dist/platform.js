@@ -1,6 +1,7 @@
-import {config} from './config.js?v=20261125-macro01';
-import {setCurriculum} from './courses.js?v=20261125-macro01';
-import {mergeState} from './state-merge.js?v=20261125-macro01';
+const publicHome=new URL('./',import.meta.url).href,learningHome=new URL('./learn/',import.meta.url).href;
+import {config} from './config.js?v=20261125-seo01';
+import {setCurriculum} from './courses.js?v=20261125-seo01';
+import {mergeState} from './state-merge.js?v=20261125-seo01';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sessionKey='zhiben-auth-v1',deviceStorageKey='zhiben-browser-v1';
 let current=null,refreshing,revision=0,baseState={},pendingState,queue=Promise.resolve(),timer,heartbeat;
@@ -48,12 +49,12 @@ export const platform={
   async flush(){clearTimeout(timer);if(pendingState){const snapshot=pendingState;pendingState=null;queue=queue.catch(()=>{}).then(()=>saveSnapshot(snapshot));}return queue;},
   async submitQuiz(course,answers){await this.flush();const result=await api('quiz_submit',{course_id:course.id,course_revision:course.revision,answers,attempt_id:crypto.randomUUID()});updateLocalFromServer(result);signal('saved');return result.state.courses[course.id];},
   async downloadWorkbook(courseId){const file=await api('course_download',{course_id:courseId,file_id:'workbook'});const bytes=Uint8Array.from(atob(file.base64),c=>c.charCodeAt(0));const url=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));const a=document.createElement('a');a.href=url;a.download=file.filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);},
-  async logout(){clearInterval(heartbeat);clearTimeout(timer);try{await this.flush();}catch{}try{await fetch(config.supabaseUrl+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:config.publishableKey,Authorization:'Bearer '+await token()}});}catch{}persistSession(null);location.href='./';},
+  async logout(){clearInterval(heartbeat);clearTimeout(timer);try{await this.flush();}catch{}try{await fetch(config.supabaseUrl+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:config.publishableKey,Authorization:'Bearer '+await token()}});}catch{}persistSession(null);location.href=learningHome;},
   async changePassword(password){return api('change_password',{password});}
 };
 window.platform=platform;
 const browserLabel=()=>{const ua=navigator.userAgent;let browser=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Firefox\//.test(ua)?'Firefox':/Safari\//.test(ua)?'Safari':'浏览器';return browser+' · '+(/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':/Windows/.test(ua)?'Windows':/Macintosh/.test(ua)?'macOS':'设备');};
-function gateShell(content){$('#app').innerHTML=`<main class="auth-page"><section class="auth-story"><a class="auth-brand" href="./"><span>戊戌.</span><small>金融知识体系</small></a><div><span class="auth-eyebrow">UNDERSTAND, THEN DECIDE.</span><h1>把金融知识，<br>变成自己的判断。</h1><p>从货币、信用到资本与并购，<br>循序渐进理解钱的逻辑。</p><div class="auth-features"><span>系统课程</span><span>互动实验</span><span>复习与练习</span></div></div><small>让理解，成为你的底气。</small></section><section class="auth-panel">${content}</section></main>`;}
+function gateShell(content){$('#app').innerHTML=`<main class="auth-page"><section class="auth-story"><a class="auth-brand" href="${publicHome}"><span>戊戌.</span><small>金融知识体系</small></a><div><span class="auth-eyebrow">UNDERSTAND, THEN DECIDE.</span><h1>把金融知识，<br>变成自己的判断。</h1><p>从货币、信用到资本与并购，<br>循序渐进理解钱的逻辑。</p><div class="auth-features"><span>系统课程</span><span>互动实验</span><span>复习与练习</span></div></div><small>让理解，成为你的底气。</small></section><section class="auth-panel">${content}</section></main>`;}
 export async function showGate(admin=false){
   const setup=new URLSearchParams(location.hash.slice(1)).get('setup');
   if(setup){
@@ -62,8 +63,8 @@ export async function showGate(admin=false){
     try{
       const info=await api('setup_info',{setup_key:setup},true);
       $('#setup-content').innerHTML=`<form id="setup-form"><label>管理员邮箱<input value="${esc(info.email)}" readonly autocomplete="username"></label><label>显示名称<input name="display_name" value="管理员" required maxlength="80" autocomplete="name"></label><label>设置密码<input name="password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"></label><label>再次输入密码<input name="confirm" type="password" minlength="12" required autocomplete="new-password"></label><p class="auth-error" role="alert"></p><button class="button primary" type="submit">开通管理员账号</button><p class="auth-hint">密码至少 12 个字符。开通后，用此邮箱和密码登录。</p></form>`;
-      $('#setup-form').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;if(f.password.value!==f.confirm.value){$('.auth-error').textContent='两次输入的密码不一致。';return;}f.querySelector('button').disabled=true;try{await api('setup_admin',{setup_key:setup,password:f.password.value,display_name:f.display_name.value},true);gateShell('<div class="auth-box"><span class="eyebrow">开通成功</span><h2>你的学习空间已准备就绪</h2><p>请使用刚刚设置的邮箱和密码登录。</p><a class="button primary" href="./">前往登录</a></div>');}catch(err){$('.auth-error').textContent=err.message;f.querySelector('button').disabled=false;}});
-    }catch(e){$('#setup-content').innerHTML=`<p class="auth-error">${esc(e.message)}</p><a class="button secondary" href="./">返回登录</a>`;}return;
+      $('#setup-form').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;if(f.password.value!==f.confirm.value){$('.auth-error').textContent='两次输入的密码不一致。';return;}f.querySelector('button').disabled=true;try{await api('setup_admin',{setup_key:setup,password:f.password.value,display_name:f.display_name.value},true);gateShell('<div class="auth-box"><span class="eyebrow">开通成功</span><h2>你的学习空间已准备就绪</h2><p>请使用刚刚设置的邮箱和密码登录。</p><a class="button primary" href="/wuxufinance/learn/">前往登录</a></div>');}catch(err){$('.auth-error').textContent=err.message;f.querySelector('button').disabled=false;}});
+    }catch(e){$('#setup-content').innerHTML=`<p class="auth-error">${esc(e.message)}</p><a class="button secondary" href="/wuxufinance/learn/">返回登录</a>`;}return;
   }
   if(!current?.access_token){
     gateShell(`<div class="auth-box"><span class="eyebrow">欢迎回到戊戌</span><h2>登录你的学习空间</h2><p class="muted">继续课程，保存每一次理解。</p><form id="login-form" class="auth-form"><label>登录邮箱<input type="email" name="email" required autocomplete="username" placeholder="你的账号邮箱"></label><label>密码<input name="password" type="password" required autocomplete="current-password" placeholder="输入登录密码"></label><p class="auth-error" role="alert"></p><button class="button primary" type="submit">登录学习</button></form><div class="auth-notice"><b>账号由管理员开通</b><p>首次在新浏览器登录后，需要管理员批准此浏览器。</p></div><p class="auth-privacy">本站记录登录时间、浏览器信息、课程进度与练习成绩，供管理员管理账号和检查学习情况。</p></div>`);
@@ -73,7 +74,7 @@ export async function showGate(admin=false){
   try{
     const status=await api('status',{label:browserLabel()});platform.profile=status.profile;platform.device=status.device;
     if(status.profile.status!=='active'||status.device.status!=='active'||(admin&&status.profile.role!=='admin')){
-      gateShell(`<div class="auth-box"><span class="eyebrow">${esc(status.profile.email)}</span><h2>${status.profile.status==='blocked'?'账号已暂停':status.device.status==='revoked'?'此浏览器的授权已撤销':admin&&status.profile.role!=='admin'?'此页面仅供管理员使用':'等待管理员批准'}</h2><p class="muted">${admin&&status.profile.role!=='admin'?'你可以返回学习页面。':'请联系管理员，在人员与设备页面批准账号和此浏览器。'}</p><div class="device-card"><b>${esc(status.device.label)}</b><span>设备编号 ${esc(status.device.id.slice(0,8))}</span><span>账号设备上限 ${status.profile.max_devices} 台浏览器</span></div><div class="button-row"><button class="button primary" id="check-again">刷新授权状态</button><button class="button secondary" id="gate-logout">退出登录</button>${admin&&status.profile.role!=='admin'?'<a href="./" class="text-link">返回学习</a>':''}</div></div>`);$('#check-again').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();return;
+      gateShell(`<div class="auth-box"><span class="eyebrow">${esc(status.profile.email)}</span><h2>${status.profile.status==='blocked'?'账号已暂停':status.device.status==='revoked'?'此浏览器的授权已撤销':admin&&status.profile.role!=='admin'?'此页面仅供管理员使用':'等待管理员批准'}</h2><p class="muted">${admin&&status.profile.role!=='admin'?'你可以返回学习页面。':'请联系管理员，在人员与设备页面批准账号和此浏览器。'}</p><div class="device-card"><b>${esc(status.device.label)}</b><span>设备编号 ${esc(status.device.id.slice(0,8))}</span><span>账号设备上限 ${status.profile.max_devices} 台浏览器</span></div><div class="button-row"><button class="button primary" id="check-again">刷新授权状态</button><button class="button secondary" id="gate-logout">退出登录</button>${admin&&status.profile.role!=='admin'?'<a href="/wuxufinance/learn/" class="text-link">返回学习</a>':''}</div></div>`);$('#check-again').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();return;
     }
     const [curriculum,saved]=await Promise.all([api('courses'),api('state_get')]);
     if(!curriculum.courses.length)throw new Error('课程尚未发布，请稍后再来。');setCurriculum(curriculum);
@@ -82,7 +83,7 @@ export async function showGate(admin=false){
     const pending=localStorage.getItem(platform.storageKey+':pending');if(pending){try{const local=JSON.parse(pending),old=JSON.parse(localStorage.getItem(platform.storageKey+':base')||'{}');platform.state=mergeState(old,local,saved.state);platform.saveState(platform.state);}catch{}}localStorage.setItem(platform.storageKey,JSON.stringify(platform.state));
     $('#app').innerHTML='';
     heartbeat=setInterval(async()=>{try{const s=await api('status',{label:browserLabel()});if(s.profile.status!=='active'||s.device.status!=='active')location.reload();}catch(e){if(e.status===401||e.status===403)location.reload();}},45000);
-    if(admin)await import('./admin.js?v=20261125-macro01');else await import('./app.js?v=20261125-macro01');
+    if(admin)await import('./admin.js?v=20261125-seo01');else await import('./app.js?v=20261125-seo01');
   }catch(err){gateShell(`<div class="auth-box"><h2>暂时无法进入学习空间</h2><p class="auth-error">${esc(err.message)}</p><div class="button-row"><button class="button primary" id="retry-entry">重新检查</button><button class="button secondary" id="gate-logout">退出登录</button></div></div>`);$('#retry-entry').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();}
 }
 window.addEventListener('online',()=>{const stored=platform.profile&&localStorage.getItem(platform.storageKey+':pending');if(stored){try{platform.saveState(JSON.parse(stored));}catch{}}});

@@ -1,0 +1,7 @@
+// Read-only guard: supply a private export outside this public checkout.
+import{readFile,readdir}from'node:fs/promises';import{parseHTML}from'linkedom';import assert from'node:assert/strict';
+const path=process.argv[2];if(!path)throw Error('Provide the private curriculum export path.');const original=JSON.parse(await readFile(path,'utf8')).map(r=>r.payload||r),catalog=JSON.parse(await readFile(new URL('../content/public-catalog.json',import.meta.url),'utf8')),pages=JSON.parse(await readFile(new URL('../content/generated-pages.json',import.meta.url),'utf8'));
+assert.equal(catalog.length,original.length);for(const c of catalog){const source=original.find(s=>s.id===c.id);assert(source);assert.equal(c.title,source.title);assert.deepEqual(c.units,source.sections.map(s=>({id:s.id,title:s.title})));assert.equal(c.questionCount,source.quiz.length);assert.equal(c.caseCount,source.cases.length);}
+let questions=0;const texts=[];for(const p of pages){const{document}=parseHTML(await readFile(new URL('../dist/'+p.file,import.meta.url),'utf8'));texts.push({path:p.file,text:document.querySelector('main').textContent});}
+for(const c of original)for(const q of c.quiz){questions++;for(const p of texts)if(p.text.includes(q.q)&&q.options.every(o=>p.text.includes(o)))throw Error('Full private quiz leaked into '+p.path);}
+console.log(JSON.stringify({verifiedCourses:original.length,publicMetadataMatches:true,privateQuestionsChecked:questions,privateQuizLeaks:0},null,2));

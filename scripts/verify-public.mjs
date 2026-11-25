@@ -1,11 +1,10 @@
 import {readdir,readFile} from 'node:fs/promises';
-const expected=new Set(['.nojekyll','index.html','admin.html','app.js','admin.js','platform.js','bootstrap.js','state-merge.js','courses.js','config.js','math.js','topic-labs.js','styles.css','platform.css','favicon.svg','course-content.js','course-series.js','wealth-labs.js','macro-labs.js','course-activities.js','inline-labs.js','advanced-labs.js','professional-labs.js','source-figures.js','vendor']);
-for(const name of await readdir(new URL('../dist/',import.meta.url))){
-  if(!expected.has(name))throw Error('Unexpected public file: '+name);
-  if(name==='vendor'){const entries=await readdir(new URL('../dist/vendor/',import.meta.url));if(entries.sort().join(',')!=='katex-LICENSE.txt,katex.mjs')throw Error('Unexpected vendor files');continue;}
-  const source=await readFile(new URL('../dist/'+name,import.meta.url),'utf8');
-  if(/sb_secret_|SUPABASE_SERVICE_ROLE_KEY|BEGIN (RSA |EC )?PRIVATE KEY/.test(source))throw Error('Private credential reference in public client: '+name);
-}
-const loader=await readFile(new URL('../dist/courses.js',import.meta.url),'utf8');
-if(!loader.includes('export const courses=[];')||loader.includes('COURSE_INSERTION_POINT'))throw Error('The public course loader must not embed private course content.');
-console.log('Passed: public file allowlist, no private keys, and no bundled curriculum.');
+const pages=JSON.parse(await readFile(new URL('../content/generated-pages.json',import.meta.url),'utf8'));
+const expected=new Set(['.nojekyll','index.html','404.html','admin.html','learn/index.html','app.js','admin.js','platform.js','bootstrap.js','state-merge.js','courses.js','config.js','math.js','topic-labs.js','styles.css','platform.css','favicon.svg','course-content.js','course-series.js','wealth-labs.js','macro-labs.js','course-activities.js','inline-labs.js','advanced-labs.js','professional-labs.js','source-figures.js','public.css','public-tools.js','public-tool-models.js','legacy-links.js','catalog-filter.js','robots.txt','sitemap.xml','share-card.png','vendor/katex.mjs','vendor/katex-LICENSE.txt',...pages.map(p=>p.file)]);
+async function walk(path=''){for(const e of await readdir(new URL('../dist/'+path,import.meta.url),{withFileTypes:true})){const name=path+e.name;if(e.isSymbolicLink())throw Error('Unexpected symlink: '+name);if(e.isDirectory()){await walk(name+'/');continue;}if(!expected.has(name))throw Error('Unexpected public file: '+name);const bytes=await readFile(new URL('../dist/'+name,import.meta.url));if(name==='share-card.png'){if(!bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw Error('Invalid share image');continue;}const source=bytes.toString('utf8');if(/sb_secret_|SUPABASE_SERVICE_ROLE_KEY|BEGIN (RSA |EC )?PRIVATE KEY/.test(source))throw Error('Private credential reference in public client: '+name);if(name.endsWith('.html')&&/course_workbook_|"(?:answers|lastAnswers|key_hash|base64)"\s*:/.test(source))throw Error('Private learning/file data in public HTML: '+name);}}
+await walk();
+const loader=await readFile(new URL('../dist/courses.js',import.meta.url),'utf8');if(!loader.includes('export const courses=[];')||loader.includes('COURSE_INSERTION_POINT'))throw Error('The public course loader must not embed private course content.');
+const catalog=JSON.parse(await readFile(new URL('../content/public-catalog.json',import.meta.url),'utf8'));
+const allowed=['id','series','lesson','title','subtitle','category','description','minutes','keywords','units','caseCount','questionCount','toolCount','downloads'];
+for(const c of catalog){if(Object.keys(c).some(k=>!allowed.includes(k))||c.units.some(u=>Object.keys(u).some(k=>!['id','title'].includes(k))))throw Error('Public metadata exceeded its approved fields.');}
+console.log('Passed: recursive public file allowlist, metadata-only course introductions, no private keys, learner records, answers or bundled curriculum.');

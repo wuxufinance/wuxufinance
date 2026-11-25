@@ -1,8 +1,8 @@
-import {courseSeries,seriesOf,lessonNumber,courseCaption,seriesGroups} from './course-series.js?v=20261125-macro01';
-import {renderBody,renderFormulaLines,mountInlineLabs} from './course-content.js?v=20261125-macro01';
-import {topicLabs,runTopicLab} from './topic-labs.js?v=20261125-macro01';
-import {courses,sources} from './courses.js?v=20261125-macro01';
-import {bondMetrics,yieldToMaturity,portfolioMetrics,compound,institutionMetrics,acquisitionMetrics} from './math.js?v=20261125-macro01';
+import {courseSeries,seriesOf,lessonNumber,courseCaption,seriesGroups,publicSeriesUrl,publicCourseUrl} from './course-series.js?v=20261125-seo01';
+import {renderBody,renderFormulaLines,mountInlineLabs} from './course-content.js?v=20261125-seo01';
+import {topicLabs,runTopicLab} from './topic-labs.js?v=20261125-seo01';
+import {courses,sources} from './courses.js?v=20261125-seo01';
+import {bondMetrics,yieldToMaturity,portfolioMetrics,compound,institutionMetrics,acquisitionMetrics} from './math.js?v=20261125-seo01';
 
 const $ = (s,root=document)=>root.querySelector(s);
 const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
@@ -33,13 +33,13 @@ function shell(){const active=route.view;const p=totalProgress();return `
 <aside class="sidebar ${mobileOpen?'open':''}" aria-label="学习导航">
   <a class="brand" href="#/catalog"><span class="brand-mark">${icon('book')}</span><span><b>戊戌<span class="brand-period">.</span></b><small>金融知识体系</small></span></a>
   <div class="side-label">你的金融学习空间</div>
-  <nav class="primary-nav">
+  <nav class="primary-nav"><a href="${new URL('./',import.meta.url).href}">${icon('leaf')}网站首页</a>
     <a href="#/catalog" class="${active==='catalog'?'active':''}">${icon('grid')}课程总览<span class="tiny-count">${courses.length}</span></a>
     <a href="${courseLink(route.course)}" class="${active==='course'?'active':''}">${icon('book')}课程学习</a>
     <a href="#/lab" class="${active==='lab'?'active':''}">${icon('lab')}互动实验室</a>
     <a href="#/review" class="${active==='review'?'active':''}">${icon('review')}复习与错题</a>
     <a href="#/progress" class="${active==='progress'?'active':''}">${icon('chart')}学习进度</a>
-    ${window.platform.profile.role==='admin'?'<a href="./admin.html">'+icon('grid')+'管理后台</a>':''}
+    ${window.platform.profile.role==='admin'?'<a href="'+new URL('./admin.html',import.meta.url).href+'">'+icon('grid')+'管理后台</a>':''}
   </nav>
   <div class="side-label course-label">课程目录<span>${courses.length} 讲</span></div>
   <nav class="course-nav">${seriesGroups(courses).map(group=>`<details class="series-nav" ${active!=='course'||seriesOf(route.course).id===group.id?'open':''}><summary><span>${esc(group.title)}</span><small>${group.courses.length}/${group.total} 讲</small></summary>${group.courses.map(c=>`<a href="${courseLink(c)}" class="${active==='course'&&route.course.id===c.id?'selected':''}"><span class="lesson-index ${progress(c).complete?'done':''}">${progress(c).complete?icon('check'):String(lessonNumber(c)).padStart(2,'0')}</span><span>${c.title}</span>${c.id===latestCourse().id?'<i>新</i>':''}</a>`).join('')}</details>`).join('')}</nav>
@@ -56,7 +56,7 @@ function chartSvg(face=1000,coupon=.03,years=5,y=.04,m=1,hero=false){const low=M
 function coursePage(){const c=route.course,p=progress(c),r=record(c.id);const saved=state.bookmarks.includes(c.id+':all');return `<div class="page-eyebrow">LEARN WITH CLARITY<span>循序渐进 · 学以致用</span></div><div class="page-heading"><div><h1>${route.pane==='overview'?'今天，让金融更好懂。':c.title}</h1><p>${route.pane==='overview'?'把复杂的知识，变成生活中用得上的判断。':`${courseCaption(c)} · ${c.subtitle}`}</p></div><button class="button secondary compact" data-action="bookmark" data-key="${c.id}:all">${icon('review')}${saved?'已加入复习':'加入复习'}</button></div>
 ${route.pane==='overview'?`<section class="lesson-hero"><div class="hero-copy"><div class="hero-eyebrow"><span>第${chinese(lessonNumber(c))}讲</span>${esc(seriesOf(c).title)}${c.id===latestCourse().id?'<b>最新课程</b>':''}</div><h2>${c.title}</h2><p>${c.description}</p><div class="hero-meta"><span>${icon('clock')}约 ${c.minutes} 分钟</span><span>${icon('book')}${c.sections.length} 个知识单元</span><span>${icon('target')}${c.quiz.length} 道随堂测试</span></div><a class="button lime" href="${courseLink(c,'concepts',r.read.length?c.sections.find(s=>!r.read.includes(s.id))?.id||c.sections[0].id:'')}">${icon('book')}${p.read?'继续学习':'开始学习'}</a></div>${heroVisual(c)}</section>`:''}
 <nav class="lesson-tabs" aria-label="本讲内容">${tabs.map(([key,title])=>`<a href="${courseLink(c,key)}" class="${route.pane===key?'active':''}" ${route.pane===key?'aria-current="page"':''}>${title}${key==='calculator'?'<span class="tab-dot"></span>':''}</a>`).join('')}</nav>
-<div class="lesson-pane">${({overview:overview,concepts:concepts,formulas:formulas,cases:cases,calculator:calculator,quiz:quiz})[route.pane](c)}</div>`;}
+<nav class="course-context-links" aria-label="课程关联"><a href="${publicSeriesUrl(c)}">所属课程目录</a><a href="${publicCourseUrl(c)}">本讲公开介绍</a></nav><div class="lesson-pane">${({overview:overview,concepts:concepts,formulas:formulas,cases:cases,calculator:calculator,quiz:quiz})[route.pane](c)}</div>`;}
 
 function heroVisual(c){
   if(c.calculator==='bond')return `<div class="hero-visual"><div class="bond-mini"><span>一张债券，一组未来现金流</span><div><b>¥1,000</b><i>面值</i></div><div class="bond-mini-bottom"><span>年票面利率 <strong>3.0%</strong></span><span>剩余期限 <strong>5 年</strong></span></div></div>${chartSvg(1000,.03,5,.04,1,true)}<span class="visual-caption">收益率在变，价格也在变。</span></div>`;

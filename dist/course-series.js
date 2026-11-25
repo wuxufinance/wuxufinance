@@ -7,3 +7,6 @@ export const seriesOf=c=>courseSeries.find(s=>s.id===c.series)||courseSeries[0];
 export const lessonNumber=c=>Number.isInteger(c.lesson)?c.lesson:c.id;
 export const courseCaption=c=>seriesOf(c).title+' · 第'+lessonNumber(c)+'讲';
 export const seriesGroups=courses=>courseSeries.map(s=>({...s,courses:courses.filter(c=>seriesOf(c).id===s.id).sort((a,b)=>lessonNumber(a)-lessonNumber(b))})).filter(s=>s.courses.length);
+
+export const publicSeriesUrl=c=>new URL('courses/'+seriesOf(c).id+'/',import.meta.url).href;
+export const publicCourseUrl=c=>new URL('courses/'+seriesOf(c).id+'/lesson-'+String(lessonNumber(c)).padStart(2,'0')+'/',import.meta.url).href;
