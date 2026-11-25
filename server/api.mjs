@@ -49,6 +49,16 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
       const command=(a,data={})=>rpc('zb_command',{...params,p_action:a,p_data:data});
       if(action==='status')return reply(await command('status',{label:typeof body.label==='string'?body.label.slice(0,180):'浏览器'}));
       if(action==='courses'||action==='state_get'||action==='admin_dashboard')return reply(await command(action));
+      if(action==='course_download'){
+        if(!Number.isInteger(body.course_id)||body.file_id!=='workbook')throw new Error('配套文件请求无效。');
+        const all=await command('courses');
+        const course=all.courses.find(c=>c.id===body.course_id);
+        if(!course?.downloads?.some(d=>d.id===body.file_id))throw new Error('COURSE_NOT_FOUND');
+        const rows=await remote('/rest/v1/zb_settings?key=eq.course_workbook_'+body.course_id+'&select=value');
+        const file=rows[0]?.value;
+        if(!file||!/^wealth_lesson\d{2}\.xlsx$/.test(file.filename)||typeof file.base64!=='string')throw new Error('配套文件暂时不可用。');
+        return reply(file);
+      }
       if(action==='state_save'){
         const all=await command('courses');
         if(!Number.isInteger(body.revision)||body.revision<0)throw new Error('学习记录版本无效。');

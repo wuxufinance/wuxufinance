@@ -10,3 +10,8 @@ const marker='<p>图示源码：'+JSON.stringify({svg:safe}).replace(/&/g,'&amp;
 const broken=renderBody('<p>图示源码：'+JSON.stringify({svg:'&lt;svg&gt;&lt;/svg&gt;'})+'</p>',document);assert(broken.includes('figure-fallback'));
 const formula=renderBody('<table><tr><td>FCFF</td><td><p>公式：EBIT(1-T)+D\\&amp;A-CapEx-\\Delta NWC</p></td></tr></table>',document);const root=document.createElement('div');root.innerHTML=formula;assert.equal(root.querySelectorAll('math').length,1);assert.equal(root.querySelectorAll('.formula-fallback').length,0);
 console.log('Passed: original SVG geometry/labels, inert diagram boundary, and single rendering of formulas nested in tables.');
+
+const multiline='<svg viewBox="0 0 100 100"><defs><linearGradient id="shade"><stop offset="0%" stop-color="#278164"/><stop offset="100%" stop-color="#8ebc6b"/></linearGradient></defs><path d="M 0,0\n L 50,50\n L 100,0 Z" fill="url(#shade)"/></svg>';
+const preserved=sanitizeFigure(multiline,document,'multiline');assert(preserved.includes('L 50,50'));assert(preserved.includes('linearGradient'));assert(preserved.includes('url(#multiline-0)'));assert(!sanitizeFigure('<svg viewBox="0 0 10 10"><path d="M0 0L5 5" fill="url(https://evil.invalid/x)"/></svg>',document).includes('evil.invalid'));
+const emptySvgNodes=sanitizeFigure('<svg viewBox="0 0 10 10"><title /><desc /><g /><path d="M0 0L5 5"/></svg>',document);
+const emptyRoot=document.createElement('div');emptyRoot.innerHTML=emptySvgNodes;assert.equal(emptyRoot.querySelectorAll('title path,desc path').length,0);assert(emptySvgNodes.includes('<title></title>'));

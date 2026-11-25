@@ -1,5 +1,6 @@
-import {advancedLabs} from './advanced-labs.js?v=20261125-courses40';
-import {professionalLabs} from './professional-labs.js?v=20261125-courses40';
+import {advancedLabs} from './advanced-labs.js?v=20261125-wealth02';
+import {professionalLabs} from './professional-labs.js?v=20261125-wealth02';
+import {wealthLabs} from './wealth-labs.js?v=20261125-wealth02';
 // All money inputs use 万元; rates use percentages. These are teaching models.
 const n=x=>Number(x).toLocaleString('zh-CN',{maximumFractionDigits:2});
 const p=x=>n(x*100)+'%';
@@ -22,5 +23,6 @@ export const inlineLabs={
 };
 Object.assign(inlineLabs,advancedLabs);
 Object.assign(inlineLabs,professionalLabs);
+Object.assign(inlineLabs,wealthLabs);
 export const legacyLabNames={'股权融资模拟器':'equity','企业资本成本计算器':'wacc','IPO发行模拟器':'ipo','企业偿债压力测试':'debt','五年期DCF估值计算器':'dcf','并购溢价与协同价值模拟器':'synergy','股票支付并购EPS模拟器':'eps','私募股权LBO收益模拟器':'lbo','Sources & Uses融资结构计算器':'sources','QoE正常化盈利计算器':'qoe','投行顾问费模拟器':'fees','并购投资委员会压力测试':'committee','多资产对冲压力测试':'hedge'};
 export function runInlineLab(key,data){const item=inlineLabs[key];if(!item)throw Error('未知计算工具。');for(const field of item.fields){const v=data[field.key];if(!Number.isFinite(v)||v<field.min||v>field.max)throw Error('请检查输入范围：'+field.label);if(field.key==='years'&&!Number.isInteger(v))throw Error('持有年限请使用整数。');}const stats=item.run(data);for(const [,v] of stats)if(/NaN|Infinity/.test(v))throw Error('当前输入无法计算，请检查分母。');return stats;}

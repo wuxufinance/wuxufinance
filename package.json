@@ -6,7 +6,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node tests/content.test.mjs && node tests/advanced-labs.test.mjs && node tests/professional-labs.test.mjs && node tests/source-figures.test.mjs && node scripts/verify-public.mjs",
+    "test": "node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node tests/content.test.mjs && node tests/advanced-labs.test.mjs && node tests/professional-labs.test.mjs && node tests/source-figures.test.mjs && node tests/wealth.test.mjs && node scripts/verify-public.mjs",
     "audit:courses": "node scripts/audit-curriculum.mjs"
   },
   "dependencies": {
