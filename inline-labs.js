@@ -1,7 +1,7 @@
-import {macroLabs} from './macro-labs.js?v=20261125-macro01';
-import {advancedLabs} from './advanced-labs.js?v=20261125-macro01';
-import {professionalLabs} from './professional-labs.js?v=20261125-macro01';
-import {wealthLabs} from './wealth-labs.js?v=20261125-macro01';
+import {macroLabs} from './macro-labs.js?v=20261125-seo01';
+import {advancedLabs} from './advanced-labs.js?v=20261125-seo01';
+import {professionalLabs} from './professional-labs.js?v=20261125-seo01';
+import {wealthLabs} from './wealth-labs.js?v=20261125-seo01';
 // All money inputs use 万元; rates use percentages. These are teaching models.
 const n=x=>Number(x).toLocaleString('zh-CN',{maximumFractionDigits:2});
 const p=x=>n(x*100)+'%';

@@ -1,7 +1,7 @@
-import {activityHTML,parseActivity,mountActivities} from './course-activities.js?v=20261125-macro01';
+import {activityHTML,parseActivity,mountActivities} from './course-activities.js?v=20261125-seo01';
 import katex from './vendor/katex.mjs';
-import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-macro01';
-import {renderSourceFigure} from './source-figures.js?v=20261125-macro01';
+import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-seo01';
+import {renderSourceFigure} from './source-figures.js?v=20261125-seo01';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const formulaOptions={output:'mathml',displayMode:true,throwOnError:true,trust:false,strict:'ignore',maxExpand:1000,maxSize:30};
 const decodeMath=s=>s.replace(/&(?:amp|lt|gt|quot|apos|#39|#34);/g,m=>({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&#34;':'"'}[m]));

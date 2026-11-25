@@ -1,0 +1,6 @@
+# Project-site reference file. Crawlers use https://wuxufinance.github.io/robots.txt at the host root.
+User-agent: *
+Allow: /wuxufinance/
+Disallow: /wuxufinance/learn/
+Disallow: /wuxufinance/admin.html
+Sitemap: https://wuxufinance.github.io/wuxufinance/sitemap.xml
