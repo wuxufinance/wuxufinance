@@ -1,6 +1,6 @@
-import {contentIssues,renderBody,mountInlineLabs,normalizeBody} from './course-content.js?v=20261124-courses35';
-import {topicLabs} from './topic-labs.js?v=20261124-courses35';
-import {api,platform} from './platform.js?v=20261124-courses35';
+import {contentIssues,renderBody,mountInlineLabs,normalizeBody} from './course-content.js?v=20261125-courses40';
+import {topicLabs} from './topic-labs.js?v=20261125-courses40';
+import {api,platform} from './platform.js?v=20261125-courses40';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const when=t=>t?new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short'}).format(new Date(t)):'尚无记录';

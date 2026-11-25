@@ -10,6 +10,8 @@ for(const row of rows){const course=row.payload||row;try{validateCourse(course);
   for(const unit of [...course.sections,...course.cases]){units++;const root=document.createElement('div');root.innerHTML=renderBody(unit.body,document);tables+=root.querySelectorAll('table').length;formulas+=root.querySelectorAll('math').length;tools+=root.querySelectorAll('[data-inline-lab]').length;
     const add=message=>issues.push('第'+course.id+'讲 '+unit.title+'：'+message);
     if(root.querySelector('.formula-fallback'))add('公式无法排版');
+    if(root.querySelector('.figure-fallback'))add('原课图示无法显示');
+    if([...unit.body.matchAll(/<p>图示源码：/g)].length!==root.querySelectorAll('.source-figure svg').length)add('原课图示数量不匹配');
     if([...root.childNodes].some(n=>n.nodeType===3&&n.textContent.trim()))add('存在散落文字');
     if(safeBody(normalizeBody(unit.body,document))!==safeBody(unit.body))add('尚未完成结构归一化');
     for(const node of root.querySelectorAll('p,td,li'))if(!node.querySelector('math')&&/\\[a-zA-Z]+/.test(node.textContent))add('存在未渲染公式');
