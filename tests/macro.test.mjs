@@ -1,0 +1,53 @@
+import {readFile} from 'node:fs/promises';
+import {createHandler} from '../server/api.mjs';
+import assert from 'node:assert/strict';
+import {parseHTML} from 'linkedom';
+import {macroLabs,macroRegime,macroGrowth,macroComposite,macroCrossAsset,macroScenario} from '../dist/macro-labs.js';
+import {runInlineLab} from '../dist/inline-labs.js';
+import {seriesGroups,lessonNumber} from '../dist/course-series.js';
+import {parseActivity,readActivity,writeActivity,activityHTML} from '../dist/course-activities.js';
+import {renderBody,contentIssues} from '../dist/course-content.js';
+const defaults=k=>Object.fromEntries(macroLabs[k].fields.map(f=>[f.key,f.value]));
+const near=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`);
+for(const[key,lab]of Object.entries(macroLabs)){
+ const d=defaults(key);assert(runInlineLab(key,d).length>=2);
+ for(const field of lab.fields){assert.throws(()=>runInlineLab(key,{...d,[field.key]:NaN}),/输入/);assert.throws(()=>runInlineLab(key,{...d,[field.key]:field.min-1}),/输入/);}
+}
+assert.equal(macroRegime(defaults('macroregime')).name,'通胀回落型放缓');
+assert.match(macroRegime({...defaults('macroregime'),growth:2.5}).name,/边界/);
+assert.equal(macroRegime({...defaults('macroregime'),growth:4,inflation:6}).name,'再通胀型环境');
+near(macroGrowth(defaults('macrogrowth')).annual,.08243216);
+near(macroGrowth({...defaults('macrogrowth'),frequency:12,current:101}).annual,1.01**12-1);
+assert.throws(()=>macroGrowth({...defaults('macrogrowth'),frequency:2}),/频率/);
+near(macroComposite(defaults('macrocomposite')),-.4);
+near(macroCrossAsset(defaults('macrocrossasset')).stock,1/11);
+near(macroCrossAsset(defaults('macrocrossasset')).bond,.035);
+assert.throws(()=>macroCrossAsset({...defaults('macrocrossasset'),discount:3}),/必须大于/);
+assert.throws(()=>macroCrossAsset({...defaults('macrocrossasset'),shock:-1000}),/必须大于/);
+const scenario=macroScenario(defaults('macroscenario'));near(scenario.mean,0);near(scenario.sd,Math.sqrt(.0067));near(scenario.lossProbability,.5);
+near(macroScenario({...defaults('macroscenario'),softProbability:100,recessionProbability:0,inflationProbability:0}).sd,0);
+assert.throws(()=>macroScenario({...defaults('macroscenario'),softProbability:49}),/100%/);
+assert.match(runInlineLab('macrosurprise',{...defaults('macrosurprise'),indicator:2})[2][1],/失业率低于/);
+const groups=seriesGroups([{id:40},{id:1001,series:'personal-wealth',lesson:1},{id:2001,series:'global-macro',lesson:1}]);assert.equal(groups.length,3);assert.deepEqual(groups.map(g=>g.total),[40,30,30]);assert.equal(lessonNumber(groups[2].courses[0]),1);
+const report=parseActivity(JSON.stringify({type:'report',id:'sample-report',title:'报告练习',fields:[{key:'country',label:'经济体',value:'美国'},{key:'analysis',label:'研究分析',multiline:true}]}));
+const checklist=parseActivity(JSON.stringify({type:'checklist',id:'sample-checks',title:'自评清单',items:['理解数据版本','能够核对频率']}));
+const originalNote='保留我的原有笔记。';let note=writeActivity(originalNote,report,{country:'英国',analysis:'第一行\n第二行'});note=writeActivity(note,checklist,[true,false]);note=writeActivity(note,report,{country:'日本',analysis:'新观点'});
+assert.equal(readActivity(note,report).country,'日本');assert.equal(readActivity(note,report).analysis,'新观点');assert.deepEqual(readActivity(note,checklist),[true,false]);assert(note.startsWith(originalNote));assert.equal((note.match(/## 报告练习/g)||[]).length,1);
+assert.throws(()=>parseActivity(JSON.stringify({...checklist,items:['重复','重复']})),/清单/);
+assert.throws(()=>writeActivity('x'.repeat(50000),report,{country:'美国'}),/容量/);
+const{document}=parseHTML('<html><body></body></html>');
+const markup=renderBody('<p>课程练习：'+JSON.stringify(report)+'</p><p>代码示例：'+JSON.stringify({code:'if x < 2:\n    print("<script>")'}) .replace(/</g,'&lt;')+'</p>',document);
+const root=document.createElement('div');root.innerHTML=markup;assert.equal(root.querySelectorAll('textarea').length,1);assert.equal(root.querySelectorAll('script').length,0);assert(root.querySelector('pre code').textContent.includes('x < 2'));assert(activityHTML(JSON.stringify(checklist)).includes('checkbox'));
+assert.equal(contentIssues({sections:[{title:'练习',body:'<p>课程练习：{}</p>'}],cases:[]}).length,1);
+console.log('Passed: macro units, compounding, regime boundaries, surprise direction, probability totals, valuation domains, independent series and note exercise persistence.');
+
+const entry=await readFile(new URL('../server/index.ts',import.meta.url),'utf8');
+const productionOrigins=[...entry.matchAll(/'(https?:[^']+)'/g)].map(m=>m[1]);
+assert(productionOrigins.includes('https://wuxufinance.github.io'));
+assert(!productionOrigins.includes('https://xinyuya713.github.io'));
+const gate=createHandler({url:'https://test.invalid',key:'unit-test-only',allowedOrigins:productionOrigins,fetcher:()=>{throw Error('No remote request expected');}});
+const preflight=await gate(new Request('https://test.invalid',{method:'OPTIONS',headers:{Origin:'https://wuxufinance.github.io'}}));
+assert.equal(preflight.status,204);assert.equal(preflight.headers.get('Access-Control-Allow-Origin'),'https://wuxufinance.github.io');
+assert.equal((await gate(new Request('https://test.invalid',{method:'POST',headers:{Origin:'https://wuxufinance.github.io'},body:JSON.stringify({action:'courses'})}))).status,401);
+assert.equal((await gate(new Request('https://test.invalid',{method:'POST',headers:{Origin:'https://xinyuya713.github.io'},body:'{}'}))).status,403);
+console.log('Passed: renamed production origin preflight, login enforcement and removal of the old origin.');

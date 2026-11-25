@@ -1,6 +1,7 @@
+import {activityHTML,parseActivity,mountActivities} from './course-activities.js?v=20261125-macro01';
 import katex from './vendor/katex.mjs';
-import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-wealth02';
-import {renderSourceFigure} from './source-figures.js?v=20261125-wealth02';
+import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-macro01';
+import {renderSourceFigure} from './source-figures.js?v=20261125-macro01';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const formulaOptions={output:'mathml',displayMode:true,throwOnError:true,trust:false,strict:'ignore',maxExpand:1000,maxSize:30};
 const decodeMath=s=>s.replace(/&(?:amp|lt|gt|quot|apos|#39|#34);/g,m=>({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&#34;':'"'}[m]));
@@ -42,12 +43,14 @@ export function normalizeBody(source,document){
   for(const p of [...root.querySelectorAll('p')])if(p.textContent===notice&&p.nextElementSibling?.textContent.startsWith('案例演示：')&&p.nextElementSibling.nextElementSibling?.textContent===notice)p.remove();
   return root.innerHTML.replace(/'/g,'&#39;');
 }
-function labHTML(key){const lab=inlineLabs[key];if(!lab)return '';return `<section class="inline-lab" data-inline-lab="${key}"><h4>${esc(lab.title)}</h4><form class="inline-lab-form"><div class="field-grid">${lab.fields.map(f=>`<label class="input-field"><span>${esc(f.label)}${f.unit?'（'+esc(f.unit)+'）':''}</span><input type="number" name="${f.key}" value="${f.value}" min="${f.min}" max="${f.max}" step="any" required></label>`).join('')}</div><button class="button secondary compact" type="reset">恢复示例参数</button></form><div class="inline-lab-result" aria-live="polite"></div><p class="small">${esc(lab.note)}</p></section>`;}
+function labHTML(key){const lab=inlineLabs[key];if(!lab)return '';return `<section class="inline-lab" data-inline-lab="${key}"><h4>${esc(lab.title)}</h4><form class="inline-lab-form"><div class="field-grid">${lab.fields.map(f=>`<label class="input-field"><span>${esc(f.label)}${f.unit?'（'+esc(f.unit)+'）':''}</span>${f.options?`<select name="${f.key}">${f.options.map(([v,l])=>`<option value="${v}" ${v===f.value?'selected':''}>${esc(l)}</option>`).join('')}</select>`:`<input type="number" name="${f.key}" value="${f.value}" min="${f.min}" max="${f.max}" step="any" required>`}</label>`).join('')}</div><button class="button secondary compact" type="reset">恢复示例参数</button></form><div class="inline-lab-result" aria-live="polite"></div><p class="small">${esc(lab.note)}</p></section>`;}
 export function renderBody(source,document=globalThis.document){
   const root=document.createElement('div');root.innerHTML=normalizeBody(source,document);
   for(const table of [...root.querySelectorAll('table')]){const wrap=document.createElement('div');wrap.className='table-scroll course-table';table.replaceWith(wrap);wrap.append(table);}
   for(const p of [...root.querySelectorAll('p')]){
     const text=p.textContent.trim();const marker=text.match(/^互动工具：([a-z]+)$/);
+    if(text.startsWith('课程练习：')){try{p.outerHTML=activityHTML(text.slice(5));}catch{p.className='activity-fallback';p.textContent='课程练习格式有误，请联系管理员。';}continue;}
+    if(text.startsWith('代码示例：')){try{const data=JSON.parse(text.slice(5));if(typeof data.code!=='string')throw Error();p.outerHTML='<pre class="course-code"><code>'+esc(data.code)+'</code></pre>';}catch{p.className='code-fallback';}continue;}
     if(text.startsWith('图示源码：')){try{p.outerHTML=renderSourceFigure(text.slice(5),document,'source-'+[...root.querySelectorAll('.source-figure')].length);}catch{p.className='figure-fallback';p.textContent='图示暂时无法显示，请参考相邻说明及数据表。';}continue;}
     if(marker){p.outerHTML=labHTML(marker[1]);continue;}
     if(text.startsWith('公式：')||text.startsWith('公式:')){try{p.innerHTML='<span class="readable-formula">'+mathHTML(text)+'</span>';}catch{p.innerHTML=renderFormulaLines(text);}}
@@ -57,9 +60,10 @@ export function renderBody(source,document=globalThis.document){
   for(const cell of root.querySelectorAll('th,td'))if(!cell.querySelector('math')&&/\\[a-zA-Z]+|^公式[：:]/.test(cell.textContent))cell.innerHTML=renderFormulaLines(cell.textContent);
   return root.innerHTML;
 }
-export function mountInlineLabs(root){
+export function mountInlineLabs(root,activityStorage){
+  mountActivities(root,activityStorage);
   for(const node of root.querySelectorAll('[data-inline-lab]')){if(node.dataset.mounted)continue;node.dataset.mounted='true';const form=node.querySelector('form'),output=node.querySelector('.inline-lab-result');
-    const update=()=>{try{const data=Object.fromEntries([...form.querySelectorAll('input[name]')].filter(x=>x.name).map(x=>[x.name,x.value.trim()===''?NaN:Number(x.value)]));output.innerHTML=runInlineLab(node.dataset.inlineLab,data).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');const table=inlineLabs[node.dataset.inlineLab].table?.(data);if(table)output.innerHTML+='<div class="table-scroll lab-data-table"><table><thead><tr>'+table.headers.map(v=>'<th>'+esc(v)+'</th>').join('')+'</tr></thead><tbody>'+table.rows.map(row=>'<tr>'+row.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';}catch(error){output.textContent=error.message;}};
+    const update=()=>{try{const data=Object.fromEntries([...form.querySelectorAll('input[name],select[name]')].filter(x=>x.name).map(x=>[x.name,x.value.trim()===''?NaN:Number(x.value)]));output.innerHTML=runInlineLab(node.dataset.inlineLab,data).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');const figure=inlineLabs[node.dataset.inlineLab].figure?.(data);if(figure)output.innerHTML+=renderSourceFigure(JSON.stringify({svg:figure}),root.ownerDocument,'lab-'+node.dataset.inlineLab).replace('原课图示（静态）','当前参数计算图示').replace('原课图示。图中参数与数据为教学设定；交互计算请使用本讲计算器。','图示随当前输入更新；参数为教学假设。');const table=inlineLabs[node.dataset.inlineLab].table?.(data);if(table)output.innerHTML+='<div class="table-scroll lab-data-table"><table><thead><tr>'+table.headers.map(v=>'<th>'+esc(v)+'</th>').join('')+'</tr></thead><tbody>'+table.rows.map(row=>'<tr>'+row.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';}catch(error){output.textContent=error.message;}};
     form.addEventListener('submit',e=>e.preventDefault());form.addEventListener('input',update);form.addEventListener('reset',()=>queueMicrotask(update));update();
   }
 }
@@ -67,6 +71,8 @@ export function contentIssues(course){
   const issues=[];
   for(const item of [...course.sections,...course.cases]){
     const checkBody=item.body.replace(/<p>图示源码：([\s\S]*?)<\/p>/g,(all,value)=>{try{const decoded=value.replace(/&(?:lt|gt|quot|#39|apos|amp);/g,x=>({'&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'",'&apos;':"'",'&amp;':'&'}[x])),data=JSON.parse(decoded);if(typeof data.svg!=='string'||data.svg.length>180000||!/^<svg\b/.test(data.svg))throw Error();}catch{issues.push(item.title+'：图示数据无效');}return '';});
+    for(const m of item.body.matchAll(/<p>课程练习：([^<]+)<\/p>/g))try{parseActivity(decodeMath(m[1]));}catch{issues.push(item.title+'：课程练习格式无效');}
+    for(const m of item.body.matchAll(/<p>代码示例：([^<]+)<\/p>/g))try{if(typeof JSON.parse(decodeMath(m[1])).code!=='string')throw Error();}catch{issues.push(item.title+'：代码示例格式无效');}
     if(/<\/p>\s*｜\s*<p>/.test(item.body))issues.push(item.title+'：对比表已拆散，请先恢复表格结构');
     if(/&lt;(?:svg|canvas|iframe|script|input)\b/i.test(checkBody))issues.push(item.title+'：存在未支持的图表或交互代码');
     if(/Generating\s|NaN|undefined/.test(item.body))issues.push(item.title+'：存在未完成占位内容');

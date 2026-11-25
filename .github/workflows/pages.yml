@@ -26,4 +26,5 @@ jobs:
           node tests/professional-labs.test.mjs
           node tests/source-figures.test.mjs
           node tests/wealth.test.mjs
+          node tests/macro.test.mjs
           node scripts/verify-public.mjs

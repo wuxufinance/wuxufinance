@@ -1,6 +1,6 @@
-import {config} from './config.js?v=20261125-wealth02';
-import {setCurriculum} from './courses.js?v=20261125-wealth02';
-import {mergeState} from './state-merge.js?v=20261125-wealth02';
+import {config} from './config.js?v=20261125-macro01';
+import {setCurriculum} from './courses.js?v=20261125-macro01';
+import {mergeState} from './state-merge.js?v=20261125-macro01';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sessionKey='zhiben-auth-v1',deviceStorageKey='zhiben-browser-v1';
 let current=null,refreshing,revision=0,baseState={},pendingState,queue=Promise.resolve(),timer,heartbeat;
@@ -82,7 +82,7 @@ export async function showGate(admin=false){
     const pending=localStorage.getItem(platform.storageKey+':pending');if(pending){try{const local=JSON.parse(pending),old=JSON.parse(localStorage.getItem(platform.storageKey+':base')||'{}');platform.state=mergeState(old,local,saved.state);platform.saveState(platform.state);}catch{}}localStorage.setItem(platform.storageKey,JSON.stringify(platform.state));
     $('#app').innerHTML='';
     heartbeat=setInterval(async()=>{try{const s=await api('status',{label:browserLabel()});if(s.profile.status!=='active'||s.device.status!=='active')location.reload();}catch(e){if(e.status===401||e.status===403)location.reload();}},45000);
-    if(admin)await import('./admin.js?v=20261125-wealth02');else await import('./app.js?v=20261125-wealth02');
+    if(admin)await import('./admin.js?v=20261125-macro01');else await import('./app.js?v=20261125-macro01');
   }catch(err){gateShell(`<div class="auth-box"><h2>暂时无法进入学习空间</h2><p class="auth-error">${esc(err.message)}</p><div class="button-row"><button class="button primary" id="retry-entry">重新检查</button><button class="button secondary" id="gate-logout">退出登录</button></div></div>`);$('#retry-entry').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();}
 }
 window.addEventListener('online',()=>{const stored=platform.profile&&localStorage.getItem(platform.storageKey+':pending');if(stored){try{platform.saveState(JSON.parse(stored));}catch{}}});

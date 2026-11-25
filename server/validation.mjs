@@ -11,7 +11,7 @@ export function safeBody(value){
 export function validateCourse(input){
   if(!input||!Number.isInteger(input.id)||input.id<1||input.id>100000)throw new Error('课程编号无效');
   const c={id:input.id,title:plain(input.title,'标题',120),subtitle:plain(input.subtitle,'副标题',160),category:plain(input.category,'分类',80),description:plain(input.description,'简介',1200),minutes:input.minutes,calculator:input.calculator};
-  if(input.series!==undefined){if(!['foundations','personal-wealth'].includes(input.series)||!Number.isInteger(input.lesson)||input.lesson<1||input.lesson>(input.series==='foundations'?40:30))throw Error('课程系列或系列内讲次无效');c.series=input.series;c.lesson=input.lesson;}
+  if(input.series!==undefined){if(!['foundations','personal-wealth','global-macro'].includes(input.series)||!Number.isInteger(input.lesson)||input.lesson<1||input.lesson>(input.series==='foundations'?40:30))throw Error('课程系列或系列内讲次无效');c.series=input.series;c.lesson=input.lesson;}
   if(input.downloads!==undefined){if(!Array.isArray(input.downloads)||input.downloads.length>3)throw Error('配套文件无效');c.downloads=input.downloads.map(d=>{if(d.id!=='workbook')throw Error('配套文件编号无效');return {id:d.id,label:plain(d.label,'配套文件名称',120)};});}
   if(!Number.isInteger(c.minutes)||c.minutes<1||c.minutes>1440||!calculators.includes(c.calculator))throw new Error('学习时长或计算器类型无效');
   if(!Array.isArray(input.keywords)||input.keywords.length>12)throw new Error('课程关键词无效');
