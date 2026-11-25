@@ -42,3 +42,5 @@
 
 /* Allow rich lessons to shrink inside the single-column mobile grid. */
 .reading-body{min-width:0}.concept-article,.prose{min-width:0;overflow-wrap:anywhere}
+
+.source-figure{margin:24px 0;padding:16px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow:auto;max-width:100%}.source-figure>svg{display:block;width:100%;height:auto;min-width:280px;max-height:950px}.source-figure figcaption{font-size:13px;line-height:1.7;color:#75877d;margin-top:12px}.source-figure .node rect,.source-figure .node polygon{fill:#e8f2ec;stroke:#729184}.source-figure .node text,.source-figure .edgeLabel text{fill:#173f35;font-size:14px}.source-figure path.flowchart-link{stroke:#82968c;fill:none}

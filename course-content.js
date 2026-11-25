@@ -1,5 +1,6 @@
 import katex from './vendor/katex.mjs';
-import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js';
+import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-courses40';
+import {renderSourceFigure} from './source-figures.js?v=20261125-courses40';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const formulaOptions={output:'mathml',displayMode:true,throwOnError:true,trust:false,strict:'ignore',maxExpand:1000,maxSize:30};
 const decodeMath=s=>s.replace(/&(?:amp|lt|gt|quot|apos|#39|#34);/g,m=>({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&#34;':'"'}[m]));
@@ -47,12 +48,13 @@ export function renderBody(source,document=globalThis.document){
   for(const table of [...root.querySelectorAll('table')]){const wrap=document.createElement('div');wrap.className='table-scroll course-table';table.replaceWith(wrap);wrap.append(table);}
   for(const p of [...root.querySelectorAll('p')]){
     const text=p.textContent.trim();const marker=text.match(/^互动工具：([a-z]+)$/);
+    if(text.startsWith('图示源码：')){try{p.outerHTML=renderSourceFigure(text.slice(5),document,'source-'+[...root.querySelectorAll('.source-figure')].length);}catch{p.className='figure-fallback';p.textContent='图示暂时无法显示，请参考相邻说明及数据表。';}continue;}
     if(marker){p.outerHTML=labHTML(marker[1]);continue;}
     if(text.startsWith('公式：')||text.startsWith('公式:')){try{p.innerHTML='<span class="readable-formula">'+mathHTML(text)+'</span>';}catch{p.innerHTML=renderFormulaLines(text);}}
   }
   // Formulas in converted table cells also need math rendering.
   for(const p of root.querySelectorAll('p'))if(/\\[a-zA-Z]+/.test(p.textContent)&&!p.querySelector('math')&&!p.closest('.inline-lab')){const text=p.textContent;p.innerHTML=esc(text).replace(/公式[：:]\s*([^：。，；]+?)(?=\s+(?:为|是|的|且)|[：。，；]|$)/g,(_,tex)=>{try{return katex.renderToString(tex.trim().replace(/&lt;/g,'<').replace(/&gt;/g,'>'),{...formulaOptions,displayMode:false});}catch{return esc(tex);}});}
-  for(const cell of root.querySelectorAll('th,td'))if(/\\[a-zA-Z]+|^公式[：:]/.test(cell.textContent))cell.innerHTML=renderFormulaLines(cell.textContent);
+  for(const cell of root.querySelectorAll('th,td'))if(!cell.querySelector('math')&&/\\[a-zA-Z]+|^公式[：:]/.test(cell.textContent))cell.innerHTML=renderFormulaLines(cell.textContent);
   return root.innerHTML;
 }
 export function mountInlineLabs(root){
@@ -64,8 +66,9 @@ export function mountInlineLabs(root){
 export function contentIssues(course){
   const issues=[];
   for(const item of [...course.sections,...course.cases]){
+    const checkBody=item.body.replace(/<p>图示源码：([\s\S]*?)<\/p>/g,(all,value)=>{try{const decoded=value.replace(/&(?:lt|gt|quot|#39|apos|amp);/g,x=>({'&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'",'&apos;':"'",'&amp;':'&'}[x])),data=JSON.parse(decoded);if(typeof data.svg!=='string'||data.svg.length>180000||!/^<svg\b/.test(data.svg))throw Error();}catch{issues.push(item.title+'：图示数据无效');}return '';});
     if(/<\/p>\s*｜\s*<p>/.test(item.body))issues.push(item.title+'：对比表已拆散，请先恢复表格结构');
-    if(/&lt;(?:svg|canvas|iframe|script|input)\b/i.test(item.body))issues.push(item.title+'：存在未支持的图表或交互代码');
+    if(/&lt;(?:svg|canvas|iframe|script|input)\b/i.test(checkBody))issues.push(item.title+'：存在未支持的图表或交互代码');
     if(/Generating\s|NaN|undefined/.test(item.body))issues.push(item.title+'：存在未完成占位内容');
     for(const m of item.body.matchAll(/<p>互动工具：([^<\s]+)<\/p>/g))if(!inlineLabs[m[1]])issues.push(item.title+'：未知互动工具');
     const formulas=[...(item.body.matchAll(/<p>公式[：:]\s*([^<]+)<\/p>/g))].map(m=>m[1]);
