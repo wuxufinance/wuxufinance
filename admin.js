@@ -1,7 +1,7 @@
-import {courseSeries,seriesOf,lessonNumber,courseCaption} from './course-series.js?v=20261125-wealth02';
-import {contentIssues,renderBody,mountInlineLabs,normalizeBody} from './course-content.js?v=20261125-wealth02';
-import {topicLabs} from './topic-labs.js?v=20261125-wealth02';
-import {api,platform} from './platform.js?v=20261125-wealth02';
+import {courseSeries,seriesOf,lessonNumber,courseCaption} from './course-series.js?v=20261125-macro01';
+import {contentIssues,renderBody,mountInlineLabs,normalizeBody} from './course-content.js?v=20261125-macro01';
+import {topicLabs} from './topic-labs.js?v=20261125-macro01';
+import {api,platform} from './platform.js?v=20261125-macro01';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const when=t=>t?new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short'}).format(new Date(t)):'尚无记录';
