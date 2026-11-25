@@ -6,7 +6,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node tests/content.test.mjs && node tests/advanced-labs.test.mjs && node tests/professional-labs.test.mjs && node tests/source-figures.test.mjs && node tests/wealth.test.mjs && node tests/macro.test.mjs && node tests/seo.test.mjs && node scripts/verify-public.mjs && node scripts/check-seo.mjs",
+    "test": "node tests/math.test.mjs && node tests/topic-labs.test.mjs && node tests/platform.test.mjs && node tests/content.test.mjs && node tests/advanced-labs.test.mjs && node tests/professional-labs.test.mjs && node tests/source-figures.test.mjs && node tests/wealth.test.mjs && node tests/macro.test.mjs && node tests/seo.test.mjs && node tests/commerce-db.test.mjs && node tests/auth-access.test.mjs && node scripts/verify-public.mjs && node scripts/check-seo.mjs",
     "audit:courses": "node scripts/audit-curriculum.mjs",
     "build": "node scripts/build-public.mjs",
     "check:seo": "node scripts/check-seo.mjs"
@@ -15,6 +15,7 @@
     "katex": "0.19.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.6.0",
     "linkedom": "0.18.12"
   }
 }

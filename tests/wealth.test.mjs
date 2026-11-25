@@ -33,15 +33,14 @@ const uid='11111111-1111-4111-8111-111111111111',sid='22222222-2222-4222-8222-22
 const token='abc.'+btoa(JSON.stringify({sub:uid,session_id:sid})).replace(/=/g,'')+'.sig';let reads=0,allowed=false;
 const mock=async(url,options)=>{
  if(url.endsWith('/auth/v1/user'))return Response.json({id:uid,email_confirmed_at:'2026-01-01'});
- if(url.includes('/rpc/zb_command'))return Response.json({courses:allowed?[{id:101,downloads:[{id:'workbook'}]}]:[]});
- if(url.includes('/rest/v1/zb_settings?key=eq.course_workbook_101&select=value')){reads++;return Response.json([{value:{filename:'wealth_lesson01.xlsx',base64:'UEsDBA=='}}]);}
+ if(url.includes('/rpc/zb_command')){const command=JSON.parse(options.body);assert.equal(command.p_action,'course_download');assert.equal(command.p_data.course_id,101);if(!allowed)return Response.json({message:'COURSE_ACCESS_REQUIRED'},{status:403});reads++;return Response.json({filename:'wealth_lesson01.xlsx',base64:'UEsDBA=='});}
  throw Error('Unexpected request');
 };
 const handler=createHandler({url:'https://test.invalid',key:'test-key',allowedOrigins:['https://test.example'],fetcher:mock});
 const req=(body,auth=true)=>new Request('https://test.invalid',{method:'POST',headers:{Origin:'https://test.example',...(auth?{Authorization:'Bearer '+token,'x-device-key':'a'.repeat(64)}:{})},body:JSON.stringify(body)});
 const body={action:'course_download',course_id:101,file_id:'workbook'};
 assert.equal((await handler(req(body,false))).status,401);assert.equal(reads,0);
-assert.equal((await handler(req(body))).status,400);assert.equal(reads,0);
+assert.equal((await handler(req(body))).status,403);assert.equal(reads,0);
 allowed=true;const file=await handler(req(body));assert.equal(file.status,200);assert.equal((await file.json()).filename,'wealth_lesson01.xlsx');assert.equal(reads,1);
 assert.equal((await handler(req({...body,file_id:'../secret'}))).status,400);assert.equal(reads,1);
 console.log('Passed: household identities, timing, shortfalls, zero-return boundaries, independent series and authenticated workbook downloads.');

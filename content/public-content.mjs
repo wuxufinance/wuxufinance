@@ -1,6 +1,6 @@
 import katex from 'katex';
 export const BASE='https://wuxufinance.github.io/wuxufinance/';
-export const VERSION='20261125-seo01';
+export const VERSION='20261125-access01';
 export const M=tex=>'<div class="math-block">'+katex.renderToString(tex,{output:'mathml',displayMode:true,throwOnError:true,trust:false})+'</div>';
 export const table=(headers,rows)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(s=>'<th scope="col">'+s+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(s=>'<td>'+s+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
 export const sources={

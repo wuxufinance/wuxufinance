@@ -1,6 +1,6 @@
-import {wealthLabs} from './wealth-labs.js?v=20261125-seo01';
-import {macroLabs} from './macro-labs.js?v=20261125-seo01';
-import {bondMetrics} from './math.js?v=20261125-seo01';
+import {wealthLabs} from './wealth-labs.js?v=20261125-access01';
+import {macroLabs} from './macro-labs.js?v=20261125-access01';
+import {bondMetrics} from './math.js?v=20261125-access01';
 const n=x=>Number(Math.abs(x)<1e-9?0:x).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
 const percent=x=>n(x*100)+'%';
 const field=(label,key,value,min,max,unit,options)=>({label,key,value,min,max,unit,options});

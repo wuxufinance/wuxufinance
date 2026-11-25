@@ -1,5 +1,7 @@
 import {validateCourse,sanitizeState,preserveHiddenState} from './validation.mjs';
+import {commerceActions,validateCommerce} from './commerce-validation.mjs';
 const messages={AUTH_REQUIRED:'请先登录。',SESSION_EXPIRED:'登录已过期，请重新登录。',ACCOUNT_RESTRICTED:'账号正在等待审核或已暂停。',DEVICE_RESTRICTED:'此浏览器尚未获得授权，或授权已被撤销。',ADMIN_REQUIRED:'只有管理员可以执行此操作。',DEVICE_LIMIT:'已达到此账号的设备数量上限，请先撤销其他设备。',KEEP_OWN_ACCESS:'请保留当前管理员账号与浏览器的访问权限。',REVOKE_EXTRA_DEVICES:'请先撤销多余设备，再降低数量上限。',COURSE_UPDATED:'课程已更新，请刷新后再操作。',QUIZ_INCOMPLETE:'请完成所有题目后提交。',SETUP_INVALID:'管理员开通链接无效或已经使用。',SETUP_BUSY:'管理员开通正在处理，请稍后重试。',COURSE_NOT_FOUND:'课程不存在或尚未发布。'};
+Object.assign(messages,{COURSE_ACCESS_REQUIRED:'本课程需要有效授权，请查看课程介绍或购买入口。',PRODUCT_NOT_AVAILABLE:'商品尚未定价或暂未开售。',PRODUCT_UPDATED:'商品已更新，请刷新确认范围与价格。',ORDER_NOT_FOUND:'订单不存在。',ORDER_STATE:'订单状态已变化，请刷新后再操作。',ORDER_RATE_LIMIT:'创建订单过于频繁，请稍后再试。',CONFIRMATION_REQUIRED:'请填写已核实的凭证与操作记录。',INVALID_SCOPE:'课程授权范围无效。',INVALID_EXPIRY:'请填写有效的到期或延期时间。',INVALID_GRANT:'授权不存在、已撤销或不允许此操作。',INVALID_PREVIEW:'试听单元不属于该课程。',INVALID_ACCESS:'课程访问配置无效。',USER_NOT_FOUND:'未找到该已注册用户。',FILE_NOT_AVAILABLE:'配套文件暂时不可用。'});
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
   const headers={apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json'};
@@ -12,16 +14,29 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
   const rpc=(name,data)=>remote('/rest/v1/rpc/'+name,data);
   const hash=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(v=>v.toString(16).padStart(2,'0')).join('');
   return async function handler(req){
-    const origin=req.headers.get('Origin'),cors={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Vary':'Origin','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-device-key','Access-Control-Allow-Methods':'POST,OPTIONS'};
+    const origin=req.headers.get('Origin'),cors={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-device-key','Access-Control-Allow-Methods':'POST,GET,OPTIONS'};
     if(origin&&allowedOrigins.includes(origin))cors['Access-Control-Allow-Origin']=origin;
     const reply=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:cors});
     if(origin&&!allowedOrigins.includes(origin))return reply({error:'此访问来源未获许可。'},403);
     if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
-    if(req.method!=='POST')return reply({error:'请通过学习网站访问。'},405);
     try{
+      if(req.method==='GET'){
+        const query=new URL(req.url).searchParams,id=Number(query.get('id'));
+        if(query.get('public')!=='course'||!Number.isInteger(id)||id<1||id>100000)return reply({error:'页面不存在。'},404);
+        const course=await rpc('zb_course_view',{p_course:id,p_user:null});
+        const series=['foundations','personal-wealth','global-macro'].includes(course.series)?course.series:'foundations',lesson=String(course.lesson||course.id).padStart(2,'0');
+        return new Response(null,{status:302,headers:{...cors,Location:'https://wuxufinance.github.io/wuxufinance/courses/'+series+'/lesson-'+lesson+'/#public-reading'}});
+      }
+      if(req.method!=='POST')return reply({error:'请通过学习网站访问。'},405);
       const raw=await req.text();if(raw.length>1000000)return reply({error:'提交内容过大。'},413);
       let body;try{body=JSON.parse(raw);}catch{return reply({error:'请求格式无效。'},400);}
       const action=body.action;
+      if(action==='payment_notify'||action==='payment_webhook')return reply({error:'暂未配置支付渠道，不能通过通知开通课程。',code:'PAYMENTS_NOT_CONFIGURED'},503);
+      if(action==='public_catalog')return reply(await rpc('zb_public_catalog',{}));
+      if(action==='public_course'){
+        if(!Number.isInteger(body.course_id)||body.course_id<1||body.course_id>100000)throw Error('课程编号无效。');
+        return reply(await rpc('zb_course_view',{p_course:body.course_id,p_user:null}));
+      }
       if(action==='setup_info'||action==='setup_admin'){
         if(typeof body.setup_key!=='string'||!/^[A-Za-z0-9_-]{40,100}$/.test(body.setup_key))throw new Error('SETUP_INVALID');
         const tokenHash=await hash(body.setup_key);
@@ -39,7 +54,7 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
       }
       const auth=req.headers.get('Authorization')||'';
       if(!/^Bearer [A-Za-z0-9._-]+$/.test(auth))throw new Error('AUTH_REQUIRED');
-      const user=await remote('/auth/v1/user',undefined,{...headers,Authorization:auth});
+      let user;try{user=await remote('/auth/v1/user',undefined,{...headers,Authorization:auth});}catch(error){if(error.status===401||error.status===403)throw Error('SESSION_EXPIRED');throw error;}
       if(!uuid.test(user.id)||user.is_anonymous||!user.email_confirmed_at)throw new Error('AUTH_REQUIRED');
       const token=auth.slice(7);let claims;
       try{claims=JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch{throw new Error('AUTH_REQUIRED');}
@@ -48,22 +63,21 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
       const params={p_actor:user.id,p_session:claims.session_id,p_device:await hash(proof)};
       const command=(a,data={})=>rpc('zb_command',{...params,p_action:a,p_data:data});
       if(action==='status')return reply(await command('status',{label:typeof body.label==='string'?body.label.slice(0,180):'浏览器'}));
+      if(commerceActions.has(action))return reply(await command(action,validateCommerce(action,body)));
+      if(action==='access_check'){if(!Number.isInteger(body.course_id)||body.course_id<1||body.course_id>100000)throw Error('课程编号无效。');return reply(await command('access_check',{course_id:body.course_id}));}
       if(action==='courses'||action==='state_get'||action==='admin_dashboard')return reply(await command(action));
       if(action==='course_download'){
         if(!Number.isInteger(body.course_id)||body.file_id!=='workbook')throw new Error('配套文件请求无效。');
-        const all=await command('courses');
-        const course=all.courses.find(c=>c.id===body.course_id);
-        if(!course?.downloads?.some(d=>d.id===body.file_id))throw new Error('COURSE_NOT_FOUND');
-        const rows=await remote('/rest/v1/zb_settings?key=eq.course_workbook_'+body.course_id+'&select=value');
-        const file=rows[0]?.value;
+        const file=await command('course_download',{course_id:body.course_id});
         if(!file||!/^wealth_lesson\d{2}\.xlsx$/.test(file.filename)||typeof file.base64!=='string')throw new Error('配套文件暂时不可用。');
         return reply(file);
       }
       if(action==='state_save'){
         const all=await command('courses');
+        const full=all.courses.filter(c=>!c.locked);
         if(!Number.isInteger(body.revision)||body.revision<0)throw new Error('学习记录版本无效。');
         const previous=await command('state_get');
-        const state=preserveHiddenState(sanitizeState(body.state,all.courses),previous.state,all.courses);
+        const state=preserveHiddenState(sanitizeState(body.state,full),previous.state,full);
         return reply(await command('state_save',{state,revision:body.revision}));
       }
       if(action==='quiz_submit'){
@@ -71,7 +85,8 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
         return reply(await command(action,{course_id:body.course_id,course_revision:body.course_revision,attempt_id:body.attempt_id,answers:body.answers}));
       }
       if(action==='change_password'){
-        await command('access_check');
+        // Recovery changes only this verified user's password, even before device approval.
+        await command('session_check');
         if(typeof body.password!=='string'||body.password.length<12||body.password.length>128)throw new Error('密码需要 12 至 128 个字符。');
         const response=await fetcher(url+'/auth/v1/user',{method:'PUT',headers:{...headers,Authorization:auth},body:JSON.stringify({password:body.password})});
         if(!response.ok)throw new Error('密码修改失败，请稍后重试。');return reply({ok:true});
@@ -99,7 +114,7 @@ export function createHandler({url,key,allowedOrigins,fetcher=fetch}){
     }catch(error){
       const message=String(error?.message||'请求失败');
       const code=Object.keys(messages).find(k=>message.includes(k));
-      const status=code==='AUTH_REQUIRED'||code==='SESSION_EXPIRED'?401:code==='ADMIN_REQUIRED'||code==='ACCOUNT_RESTRICTED'||code==='DEVICE_RESTRICTED'?403:code==='COURSE_UPDATED'?409:400;
+      const status=code==='AUTH_REQUIRED'||code==='SESSION_EXPIRED'?401:code==='ADMIN_REQUIRED'||code==='ACCOUNT_RESTRICTED'||code==='DEVICE_RESTRICTED'||code==='COURSE_ACCESS_REQUIRED'?403:code==='COURSE_UPDATED'||code==='PRODUCT_UPDATED'||code==='ORDER_STATE'?409:code==='COURSE_NOT_FOUND'||code==='ORDER_NOT_FOUND'||code==='USER_NOT_FOUND'?404:code==='ORDER_RATE_LIMIT'?429:400;
       return reply({error:code?messages[code]:message.includes('Invalid login credentials')?'邮箱或密码不正确。':message.length<160&&!/SQL|relation|column|function|syntax|permission|constraint/i.test(message)?message:'操作未完成，请刷新后重试。',code:code||'REQUEST_FAILED'},status);
     }
   };
