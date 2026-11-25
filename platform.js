@@ -1,6 +1,6 @@
-import {config} from './config.js?v=20261125-courses40';
-import {setCurriculum} from './courses.js?v=20261125-courses40';
-import {mergeState} from './state-merge.js?v=20261125-courses40';
+import {config} from './config.js?v=20261125-wealth02';
+import {setCurriculum} from './courses.js?v=20261125-wealth02';
+import {mergeState} from './state-merge.js?v=20261125-wealth02';
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sessionKey='zhiben-auth-v1',deviceStorageKey='zhiben-browser-v1';
 let current=null,refreshing,revision=0,baseState={},pendingState,queue=Promise.resolve(),timer,heartbeat;
@@ -47,6 +47,7 @@ export const platform={
   saveState(state){localStorage.setItem(this.storageKey+':pending',JSON.stringify(state));pendingState=structuredClone(state);clearTimeout(timer);signal('saving');timer=setTimeout(()=>{const snapshot=pendingState;pendingState=null;queue=queue.catch(()=>{}).then(()=>saveSnapshot(snapshot)).catch(e=>{signal('error');console.warn('Learning progress could not be saved.');});},500);},
   async flush(){clearTimeout(timer);if(pendingState){const snapshot=pendingState;pendingState=null;queue=queue.catch(()=>{}).then(()=>saveSnapshot(snapshot));}return queue;},
   async submitQuiz(course,answers){await this.flush();const result=await api('quiz_submit',{course_id:course.id,course_revision:course.revision,answers,attempt_id:crypto.randomUUID()});updateLocalFromServer(result);signal('saved');return result.state.courses[course.id];},
+  async downloadWorkbook(courseId){const file=await api('course_download',{course_id:courseId,file_id:'workbook'});const bytes=Uint8Array.from(atob(file.base64),c=>c.charCodeAt(0));const url=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));const a=document.createElement('a');a.href=url;a.download=file.filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);},
   async logout(){clearInterval(heartbeat);clearTimeout(timer);try{await this.flush();}catch{}try{await fetch(config.supabaseUrl+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:config.publishableKey,Authorization:'Bearer '+await token()}});}catch{}persistSession(null);location.href='./';},
   async changePassword(password){return api('change_password',{password});}
 };
@@ -81,7 +82,7 @@ export async function showGate(admin=false){
     const pending=localStorage.getItem(platform.storageKey+':pending');if(pending){try{const local=JSON.parse(pending),old=JSON.parse(localStorage.getItem(platform.storageKey+':base')||'{}');platform.state=mergeState(old,local,saved.state);platform.saveState(platform.state);}catch{}}localStorage.setItem(platform.storageKey,JSON.stringify(platform.state));
     $('#app').innerHTML='';
     heartbeat=setInterval(async()=>{try{const s=await api('status',{label:browserLabel()});if(s.profile.status!=='active'||s.device.status!=='active')location.reload();}catch(e){if(e.status===401||e.status===403)location.reload();}},45000);
-    if(admin)await import('./admin.js?v=20261125-courses40');else await import('./app.js?v=20261125-courses40');
+    if(admin)await import('./admin.js?v=20261125-wealth02');else await import('./app.js?v=20261125-wealth02');
   }catch(err){gateShell(`<div class="auth-box"><h2>暂时无法进入学习空间</h2><p class="auth-error">${esc(err.message)}</p><div class="button-row"><button class="button primary" id="retry-entry">重新检查</button><button class="button secondary" id="gate-logout">退出登录</button></div></div>`);$('#retry-entry').onclick=()=>location.reload();$('#gate-logout').onclick=()=>platform.logout();}
 }
 window.addEventListener('online',()=>{const stored=platform.profile&&localStorage.getItem(platform.storageKey+':pending');if(stored){try{platform.saveState(JSON.parse(stored));}catch{}}});

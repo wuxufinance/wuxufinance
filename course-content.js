@@ -1,6 +1,6 @@
 import katex from './vendor/katex.mjs';
-import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-courses40';
-import {renderSourceFigure} from './source-figures.js?v=20261125-courses40';
+import {inlineLabs,legacyLabNames,runInlineLab} from './inline-labs.js?v=20261125-wealth02';
+import {renderSourceFigure} from './source-figures.js?v=20261125-wealth02';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const formulaOptions={output:'mathml',displayMode:true,throwOnError:true,trust:false,strict:'ignore',maxExpand:1000,maxSize:30};
 const decodeMath=s=>s.replace(/&(?:amp|lt|gt|quot|apos|#39|#34);/g,m=>({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&#39;':"'",'&#34;':'"'}[m]));
@@ -59,7 +59,7 @@ export function renderBody(source,document=globalThis.document){
 }
 export function mountInlineLabs(root){
   for(const node of root.querySelectorAll('[data-inline-lab]')){if(node.dataset.mounted)continue;node.dataset.mounted='true';const form=node.querySelector('form'),output=node.querySelector('.inline-lab-result');
-    const update=()=>{try{const data=Object.fromEntries([...form.querySelectorAll('input[name]')].filter(x=>x.name).map(x=>[x.name,x.value.trim()===''?NaN:Number(x.value)]));output.innerHTML=runInlineLab(node.dataset.inlineLab,data).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');}catch(error){output.textContent=error.message;}};
+    const update=()=>{try{const data=Object.fromEntries([...form.querySelectorAll('input[name]')].filter(x=>x.name).map(x=>[x.name,x.value.trim()===''?NaN:Number(x.value)]));output.innerHTML=runInlineLab(node.dataset.inlineLab,data).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');const table=inlineLabs[node.dataset.inlineLab].table?.(data);if(table)output.innerHTML+='<div class="table-scroll lab-data-table"><table><thead><tr>'+table.headers.map(v=>'<th>'+esc(v)+'</th>').join('')+'</tr></thead><tbody>'+table.rows.map(row=>'<tr>'+row.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';}catch(error){output.textContent=error.message;}};
     form.addEventListener('submit',e=>e.preventDefault());form.addEventListener('input',update);form.addEventListener('reset',()=>queueMicrotask(update));update();
   }
 }
